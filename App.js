@@ -1,17 +1,38 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, ScrollView, WebView } from 'react-native';
+import { StyleSheet, Text, View, Image, ScrollView, Button, TouchableOpacity, WebView } from 'react-native';
+
+import { StackNavigator } from 'react-navigation';
 
 import ScrollableTabView from 'react-native-scrollable-tab-view';
 import DefaultTabBar from './Components/DefaultTabBar';
 
-// import Index from './Components/HomePage/Index';
+import Index from './Components/HomePage/Index';
 import ToolBar from './Components/Common/ToolBar';
 import Grid from './Components/Common/Grid';
 import Preview from './Components/Common/Preview';
 
-export default class App extends React.Component {
+
+
+class HomeScreen extends React.Component {
+
+  static navigationOptions = ({ navigation }) => {
+    const { state, setParams, navigate } = navigation;
+    // const isInfo = state.params.mode === 'info';
+    // const { user } = state.params;
+    return {
+      title: '绿智汇',
+      headerRight: (
+        <Button
+          title="设置"
+          onPress={() => navigate('Index')}
+        />
+      ),
+    };
+  };
   
   render() {
+
+    const { navigate } = this.props.navigation;
 
 		return (
       
@@ -21,7 +42,12 @@ export default class App extends React.Component {
 				tabBarPosition='bottom'>
 				<View style={styles.content} tabLabel='首页'>
           <View style={{flex: 1}}>
-              <ToolBar/>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => navigate('Index')}
+            >
+              <Text>Scrollable tabs example</Text>
+            </TouchableOpacity>
           </View>
           <View style={{flex: 2}} >
               <Grid/>
@@ -86,11 +112,21 @@ export default class App extends React.Component {
 	}
 }
 
+const App = StackNavigator({
+  Home: { screen: HomeScreen },
+  Index:{screen: Index}
+});
+
+export default App;
+
 const styles = StyleSheet.create({
 	content: {
 		// alignItems: 'center',
 		// justifyContent: 'center',
 		backgroundColor: '#EBEBEB',
 		flex: 1
-	}
+  },
+  button: {
+    padding: 10,
+  }
 });

@@ -6,6 +6,7 @@ const {
   StyleSheet,
   Text,
   View,
+  Image,
   Animated,
 } = ReactNative;
 const Button = require('./Button');
@@ -49,6 +50,7 @@ const DefaultTabBar = createReactClass({
       onPress={() => onPressHandler(page)}
     >
       <View style={[styles.tab, this.props.tabStyle, ]}>
+        <Image source={require('../Img/css.png')} style={{width:30,height:30}} />
         <Text style={[{color: textColor, fontWeight, }, textStyle, ]}>
           {name}
         </Text>
@@ -62,7 +64,7 @@ const DefaultTabBar = createReactClass({
     const tabUnderlineStyle = {
       position: 'absolute',
       width: containerWidth / numberOfTabs,
-      height: 4,
+      height: 2,
       backgroundColor: 'orange',
       bottom: 0,
     };
@@ -102,7 +104,8 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
   },
   tabs: {
-    height: 50,
+    height: 60,
+    paddingTop:10,
     flexDirection: 'row',
     justifyContent: 'space-around',
     borderWidth: 1,
