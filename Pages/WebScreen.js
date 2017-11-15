@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { AppRegistry, StyleSheet, Text, View } from 'react-native';
 
-export default class Index extends Component {
+export default class WebScreen extends Component {
 
   static navigationOptions = {
     title: '子页面测试',
@@ -31,4 +31,4 @@ const styles = StyleSheet.create({
 });
 
 // skip this line if using Create React Native App
-AppRegistry.registerComponent('IGreenBuy', () => Index);
+AppRegistry.registerComponent('IGreenBuy', () => WebScreen);

@@ -27,9 +27,9 @@ const DefaultTabBar = createReactClass({
 
   getDefaultProps() {
     return {
-      activeTextColor: 'orange',
-      inactiveTextColor: 'black',
-      backgroundColor: null,
+      activeTextColor: '#117BE9',
+      inactiveTextColor: '#999',
+      backgroundColor: '#F2F2F2',
     };
   },
 
@@ -41,6 +41,18 @@ const DefaultTabBar = createReactClass({
     const textColor = isTabActive ? activeTextColor : inactiveTextColor;
     const fontWeight = isTabActive ? 'bold' : 'normal';
 
+    let iconSource = isTabActive ? require('../Images/Icons/home_fill.png') : require('../Images/Icons/home.png');
+
+    if(name == '首页'){
+      iconSource = isTabActive ? require('../Images/Icons/home_fill.png') : require('../Images/Icons/home.png');
+    }else if(name == '统计'){
+      iconSource = isTabActive ? require('../Images/Icons/rank_fill.png') : require('../Images/Icons/rank.png');
+    }else if(name == '企业'){
+      iconSource = isTabActive ? require('../Images/Icons/group_fill.png') : require('../Images/Icons/group.png');
+    }else if(name == '项目'){
+      iconSource = isTabActive ? require('../Images/Icons/project_fill.png') : require('../Images/Icons/project.png');
+    }
+
     return <Button
       style={{flex: 1, }}
       key={name}
@@ -49,8 +61,8 @@ const DefaultTabBar = createReactClass({
       accessibilityTraits='button'
       onPress={() => onPressHandler(page)}
     >
-      <View style={[styles.tab, this.props.tabStyle, ]}>
-        <Image source={require('../Img/css.png')} style={{width:30,height:30}} />
+      <View style={[styles.tab, this.props.tabStyle]}>
+        <Image source={iconSource} style={{width:30,height:30}} />
         <Text style={[{color: textColor, fontWeight, }, textStyle, ]}>
           {name}
         </Text>
@@ -64,8 +76,8 @@ const DefaultTabBar = createReactClass({
     const tabUnderlineStyle = {
       position: 'absolute',
       width: containerWidth / numberOfTabs,
-      height: 2,
-      backgroundColor: 'orange',
+      height: 1,
+      backgroundColor: '#117BE9',
       bottom: 0,
     };
 
@@ -102,17 +114,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingBottom: 10,
+    paddingTop:10
   },
   tabs: {
-    height: 60,
-    paddingTop:10,
+    height: 65,
     flexDirection: 'row',
     justifyContent: 'space-around',
     borderWidth: 1,
     borderTopWidth: 0,
     borderLeftWidth: 0,
     borderRightWidth: 0,
-    borderColor: '#ccc',
+    borderColor: '#F2F2F2',
   },
 });
 
