@@ -41,16 +41,16 @@ const DefaultTabBar = createReactClass({
     const textColor = isTabActive ? activeTextColor : inactiveTextColor;
     const fontWeight = isTabActive ? 'bold' : 'normal';
 
-    let iconSource = isTabActive ? require('../Images/Icons/home_fill.png') : require('../Images/Icons/home.png');
+    let iconSource = isTabActive ? require('../../Images/Icons/home_fill.png') : require('../../Images/Icons/home.png');
 
     if(name == '首页'){
-      iconSource = isTabActive ? require('../Images/Icons/home_fill.png') : require('../Images/Icons/home.png');
+      iconSource = isTabActive ? require('../../Images/Icons/home_fill.png') : require('../../Images/Icons/home.png');
     }else if(name == '统计'){
-      iconSource = isTabActive ? require('../Images/Icons/rank_fill.png') : require('../Images/Icons/rank.png');
+      iconSource = isTabActive ? require('../../Images/Icons/rank_fill.png') : require('../../Images/Icons/rank.png');
     }else if(name == '企业'){
-      iconSource = isTabActive ? require('../Images/Icons/group_fill.png') : require('../Images/Icons/group.png');
+      iconSource = isTabActive ? require('../../Images/Icons/group_fill.png') : require('../../Images/Icons/group.png');
     }else if(name == '项目'){
-      iconSource = isTabActive ? require('../Images/Icons/project_fill.png') : require('../Images/Icons/project.png');
+      iconSource = isTabActive ? require('../../Images/Icons/project_fill.png') : require('../../Images/Icons/project.png');
     }
 
     return <Button

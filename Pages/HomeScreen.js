@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import { AppRegistry, StyleSheet, Text, View, Image, ScrollView, Button, TouchableOpacity, WebView } from 'react-native';
 // Third part
 import ScrollableTabView from 'react-native-scrollable-tab-view';
-import DefaultTabBar from '../Components/DefaultTabBar';
+import DefaultTabBar from '../Components/CoreLib/DefaultTabBar';
 // Custom
-import IndexGrid from '../Components/IndexGrid';
+import IndexGrid from '../Components/Common/IndexGrid';
 import Preview from '../Components/Common/Preview';
+// import SuperChart from '../Components/Common/SuperChart';
 
 export default class HomeScreen extends Component {
     
@@ -23,7 +24,7 @@ export default class HomeScreen extends Component {
       headerLeft: (
         <TouchableOpacity
         style={styles.button}
-        onPress={() => navigate('Web')}
+        onPress={() => navigate('Setting')}
       >
         <Image source={require('../Images/Icons/settings_light.png')} style={{width:30,height:30}} />
       </TouchableOpacity>
@@ -38,11 +39,6 @@ export default class HomeScreen extends Component {
 
     const { navigate } = this.props.navigation;
 
-    const data = Array.from(new Array(6)).map((_val, i) => ({
-      icon: 'https://gw.alipayobjects.com/zos/rmsportal/nywPmnTAvTmLusPxHPSu.png',
-      text: `name${i}`,
-    }));
-
     return (
       <ScrollableTabView renderTabBar={() => <DefaultTabBar/>} tabBarPosition='bottom'>
         <View style={styles.content} tabLabel='首页'>
@@ -53,10 +49,7 @@ export default class HomeScreen extends Component {
                 <Preview/>
             </View>
             <View style={{flex: 2, backgroundColor: 'steelblue'}} >
-                <WebView style={{width:320,height:320}}
-                  source={{uri: 'https://www.baidu.com/'}}
-                  style={{marginTop: 20}}
-                />
+             
             </View>
             <View style={{flex: 1}}>
                 <IndexGrid />
@@ -64,37 +57,7 @@ export default class HomeScreen extends Component {
         </View>
 
         <ScrollView tabLabel='项目'>
-          <Text style={{fontSize:96}}>Scroll me plz</Text>
-          <Image source={require('../Images/Icons/home_fill.png')} />
-          <Image source={require('../Images/Icons/home_fill.png')} />
-          <Image source={require('../Images/Icons/home_fill.png')} />
-          <Image source={require('../Images/Icons/home_fill.png')} />
-          <Image source={require('../Images/Icons/home_fill.png')} />
-          <Text style={{fontSize:96}}>If you like</Text>
-          <Image source={require('../Images/Icons/home_fill.png')} />
-          <Image source={require('../Images/Icons/home_fill.png')} />
-          <Image source={require('../Images/Icons/home_fill.png')} />
-          <Image source={require('../Images/Icons/home_fill.png')} />
-          <Image source={require('../Images/Icons/home_fill.png')} />
-          <Text style={{fontSize:96}}>Scrolling down</Text>
-          <Image source={require('../Images/Icons/home_fill.png')} />
-          <Image source={require('../Images/Icons/home_fill.png')} />
-          <Image source={require('../Images/Icons/home_fill.png')} />
-          <Image source={require('../Images/Icons/home_fill.png')} />
-          <Image source={require('../Images/Icons/home_fill.png')} />
-          <Text style={{fontSize:96}}>What's the best</Text>
-          <Image source={require('../Images/Icons/home_fill.png')} />
-          <Image source={require('../Images/Icons/home_fill.png')} />
-          <Image source={require('../Images/Icons/home_fill.png')} />
-          <Image source={require('../Images/Icons/home_fill.png')} />
-          <Image source={require('../Images/Icons/home_fill.png')} />
-          <Text style={{fontSize:96}}>Framework around?</Text>
-          <Image source={require('../Images/Icons/home_fill.png')} />
-          <Image source={require('../Images/Icons/home_fill.png')} />
-          <Image source={require('../Images/Icons/home_fill.png')} />
-          <Image source={require('../Images/Icons/home_fill.png')} />
-          <Image source={require('../Images/Icons/home_fill.png')} />
-          <Text style={{fontSize:80}}>React Native</Text>
+        <Text>#项目</Text>
         </ScrollView>
 
         <View style={styles.content} tabLabel='企业'>
