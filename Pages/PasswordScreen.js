@@ -25,7 +25,8 @@ export default class PasswordScreen extends Component {
     },
     headerStyle:{
       backgroundColor:'rgb(19,125,188)'
-    }
+    },
+    headerTintColor:'#F2F2F2'  // 返回箭头的颜色
   };
 
   render() {
@@ -65,7 +66,7 @@ export default class PasswordScreen extends Component {
                     inline 
                     onClick={this.logout} 
                     style={styles.logoutButton} 
-                  color="#f2f2f2">退出登陆</Button>
+                  color="#f2f2f2">确定</Button>
             </View>
         </View>
         <View style={{flex: 1,justifyContent:'flex-start',alignItems:'center'}}>

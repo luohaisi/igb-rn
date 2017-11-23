@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { AppRegistry, StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
-import { Button, Toast, Modal } from 'antd-mobile';
+import { Button, Toast, Modal, WhiteSpace } from 'antd-mobile';
 
 const alert = Modal.alert;
 
@@ -21,7 +21,8 @@ export default class FeedbackScreen extends Component {
     },
     headerStyle:{
       backgroundColor:'rgb(19,125,188)'
-    }
+    },
+    headerTintColor:'#F2F2F2'  // 返回箭头的颜色
   };
 
   submitFeedback = () =>{
@@ -49,6 +50,7 @@ export default class FeedbackScreen extends Component {
                 />
             </View>
             <View style={{width: '80%'}}>
+            <WhiteSpace />
                 <Button type="primary" 
                     size="small" 
                     inline 

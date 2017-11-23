@@ -13,42 +13,50 @@ import {
 
 import { Button, InputItem, WhiteSpace, Toast } from 'antd-mobile';
 
+var ls = require('react-native-local-storage');
+
+// Services
+var LoginService = require('../Services/LoginService.js')
+
 export default class LoginScreen extends Component {
 
   setModalVisible(visible) {
     this.setState({modalVisible: visible});
   }
 
-
   constructor(props) {
     super(props);
     this.state = {
-      account: '',
+      loginName: '',
       password: '',
-      modalVisible: false,
+      modalVisible: false
     };
   }
 
-  submit = () =>{
+  submit = (loginName, password) =>{
 
-    Toast.loading('Loading...', 1, () => {
-
-      // console.log('Load complete !!!');
-      this.setModalVisible(true)
-    });
-
+    Toast.loading('Loading...', 10);
     
+    LoginService.login(loginName, password).then(response=>{
 
-    // fetch('https://facebook.github.io/react-native/movies.json')
-    // .then((response) => response.json())
-    // .then((responseJson) => {
-    //   // alert(responseJson.movies[0].title);
-    //   alert(this.state.password);
-    // })
-    // .catch((error) => {
-    //   console.error(error);
-    // });
-    
+      console.log('response', response)
+
+      Toast.hide()
+
+      if(response.return_code == '0' && response.return_message == "Success"){
+        ls.save('userInfo', response.result[0]).then(()=>{
+          ls.get('userInfo').then((data) => {
+
+            console.log("save: ", data.entName)
+            this.props.navigation.navigate('Home', { entName:  data.entName })
+          });
+        })
+      }else{
+        Toast.fail(response.return_message, 2);
+      }
+      
+
+    });    
   }
 
   static navigationOptions = {
@@ -82,7 +90,7 @@ export default class LoginScreen extends Component {
 
           <TextInput
             style={styles.textInput}
-            onChangeText={(account) => this.setState({account})}
+            onChangeText={(loginName) => this.setState({loginName})}
             placeholder={'手机/邮箱/账号'}
             underlineColorAndroid="rgb(45,155,212)"
           />
@@ -99,7 +107,12 @@ export default class LoginScreen extends Component {
 
           <WhiteSpace size='xl' />
 
-          <Button type="primary" inline onClick={this.submit} style={styles.submitButton} color="#f2f2f2">登入</Button>
+          <Button type="primary" 
+                  inline 
+                  onClick={()=>this.submit(this.state.loginName, this.state.password)} 
+                  style={styles.submitButton} 
+                  color="#f2f2f2">登入
+          </Button>
 
           <WhiteSpace/>
 
@@ -145,7 +158,7 @@ export default class LoginScreen extends Component {
             alignItems: 'center',
           }}>
             <View style={{width: 200, height: 50, backgroundColor: 'powderblue'}}>
-              <Text>用户名: {this.state.account}</Text>
+              <Text>用户名: {this.state.loginName}</Text>
             </View>
             <View style={{width: 200, height: 50, backgroundColor: 'skyblue'}}>
               <Text>密码: {this.state.password}</Text>
@@ -153,7 +166,7 @@ export default class LoginScreen extends Component {
             <View style={{width: 200, height: 50}}>
               <TouchableHighlight style={styles.signInHome} onPress={() => {
                 this.setModalVisible(!this.state.modalVisible)
-                navigate('Home')
+                navigate('Home', { entName:  this.state.entName })
               }}>
                 <Text style={{fontSize:20,color:'lightblue',alignSelf:'center'}}>进入首页</Text>
               </TouchableHighlight>

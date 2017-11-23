@@ -14,7 +14,8 @@ export default class AboutUsScreen extends Component {
     },
     headerStyle:{
       backgroundColor:'rgb(19,125,188)'
-    }
+    },
+    headerTintColor:'#F2F2F2'  // 返回箭头的颜色
   };
 
   logout = () =>{
@@ -33,6 +34,15 @@ export default class AboutUsScreen extends Component {
       uri: 'https://upload.wikimedia.org/wikipedia/commons/d/de/Bananavarieties.jpg',
       
     };
+
+    renderIconView = (type) => {
+      if(type == 'string'){
+        return <Text style={{color:'#999'}}>0.1.0</Text>
+      }else{
+        return <Image source={require('../Images/Icons/right.png')}  style={styles.icon} />
+      }
+      
+    }
     return (
       <View style={styles.container}>
         <View style={{flex: 1,justifyContent:'center',alignItems:'center'}}>
@@ -41,9 +51,9 @@ export default class AboutUsScreen extends Component {
         <FlatList
            style={{flex: 1}}
           data={[
-            {key: '联系我们', icon:require('../Images/Icons/unlock.png'), path:'Password'},
-            {key: '服务协议', icon:require('../Images/Icons/repeal.png'), path:'Web'},
-            {key: '当前版本', icon:require('../Images/Icons/post.png'), path:'Web'},
+            {key: '联系我们', icon:require('../Images/Icons/unlock.png'), type:'modal'},
+            {key: '服务协议', icon:require('../Images/Icons/repeal.png'), type:'modal'},
+            {key: '当前版本', icon:require('../Images/Icons/post.png'), type:'string'},
           ]}
           renderItem={({item}) => (
             // <SettingItem item={item.key} icon={item.icon}  path={item.path} onPress={(path) =>{navigate(path)}} />
@@ -54,8 +64,8 @@ export default class AboutUsScreen extends Component {
                 <View style={{width: '70%', height: 50, alignItems:'flex-start', justifyContent:'center'}}>
                   <Text style={styles.item}>{item.key}</Text>
                 </View>
-                <View style={{width: '20%', height: 50, alignItems:'center', justifyContent:'center'}}>
-                  <Image source={require('../Images/Icons/right.png')}  style={styles.icon} />
+                <View style={{width: '20%', height: 50, alignItems:'center', justifyContent:'center'}} >
+                  {renderIconView(item.type)}
                 </View>
             </TouchableOpacity>
           )}

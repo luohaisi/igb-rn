@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { AppRegistry, StyleSheet, Text, View, Image, ScrollView, Button, TouchableOpacity, WebView } from 'react-native';
+import { AppRegistry, StyleSheet, Text, View, Image, ScrollView, Button, TouchableOpacity, WebView, AsyncStorage } from 'react-native';
 // Third part
 import ScrollableTabView from 'react-native-scrollable-tab-view';
 import DefaultTabBar from '../Components/CoreLib/DefaultTabBar';
@@ -8,26 +8,48 @@ import IndexGrid from '../Components/Common/IndexGrid';
 import Preview from '../Components/Common/Preview';
 // import SuperChart from '../Components/Common/SuperChart';
 
+// Services
+var HomeService = require('../Services/HomeService.js')
+
+var ls = require('react-native-local-storage');
+
 export default class HomeScreen extends Component {
+
+
+  componentDidMount(){
+    // 从接口请求默认数据
+    HomeService.overview().then(response=>{
+      console.log('overview', response)
+    });
+  }
+
+  constructor(props) {
+    super(props);
+    this.state = {userInfo: {}};
+
+    ls.get('userInfo').then((data) => {
+      console.log('get', data)
+      this.setState(() => {
+        return { userInfo: data };
+      });
+    });
+
+  }
     
   static navigationOptions = ({ navigation }) => {
     const { state, setParams, navigate } = navigation;
     // const isInfo = state.params.mode === 'info';
-    // const { user } = state.params;
     return {
-      headerTitle: '绿智汇阳光采购平台',
+      headerTitle: navigation.state.params.entName,
       headerTitleStyle:{
         color : '#F2F2F2',
         // alignSelf:'center'
       },
       headerTintColor:'#F2F2F2',
       headerLeft: (
-        <TouchableOpacity
-        style={styles.button}
-        onPress={() => navigate('Setting')}
-      >
-        <Image source={require('../Images/Icons/settings_light.png')} style={{width:30,height:30}} />
-      </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={() => navigate('Setting')} >
+          <Image source={require('../Images/Icons/settings_light.png')} style={{width:30,height:30}} />
+        </TouchableOpacity>
       ),
       headerStyle:{
         backgroundColor:'#117BE9'
@@ -49,7 +71,7 @@ export default class HomeScreen extends Component {
                 <Preview/>
             </View>
             <View style={{flex: 2, backgroundColor: 'steelblue'}} >
-             
+              <Text>登陆信息: {this.state.userInfo.entName}</Text>
             </View>
             <View style={{flex: 1}}>
                 <IndexGrid />

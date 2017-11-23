@@ -14,7 +14,8 @@ export default class ClearCacheScreen extends Component {
     },
     headerStyle:{
       backgroundColor:'rgb(19,125,188)'
-    }
+    },
+    headerTintColor:'#F2F2F2'  // 返回箭头的颜色
   };
 
   logout = () =>{
