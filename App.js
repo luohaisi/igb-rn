@@ -2,6 +2,9 @@ import React from 'react';
 import { StyleSheet, Text, View, Image, ScrollView, Button, TouchableOpacity, WebView } from 'react-native';
 
 import LoginScreen from './Pages/LoginScreen';
+
+import BrowserScreen from './Pages/BrowserScreen';
+
 import HomeScreen from './Pages/HomeScreen';
 import WebScreen from './Pages/WebScreen';
 import SettingScreen from './Pages/SettingScreen';
@@ -17,6 +20,7 @@ const App = StackNavigator({
   
   Login: { screen: LoginScreen },
   Home: { screen: HomeScreen },
+  Browser:{screen: BrowserScreen},
   Web:{screen: WebScreen},
   Setting:{screen: SettingScreen},
   // 设置内页

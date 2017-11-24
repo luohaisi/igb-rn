@@ -46,7 +46,7 @@ export default class AboutUsScreen extends Component {
     return (
       <View style={styles.container}>
         <View style={{flex: 1,justifyContent:'center',alignItems:'center'}}>
-            <Image source={require('../Images/Icons/hat.png')} />
+        <Image style={{width:120,height:120}} source={require('../Images/logo.png')} />
         </View>
         <FlatList
            style={{flex: 1}}

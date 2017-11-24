@@ -20,6 +20,23 @@ var LoginService = require('../Services/LoginService.js')
 
 export default class LoginScreen extends Component {
 
+
+  componentDidMount(){
+    // 从接口请求默认数据
+    ls.get('userInfo').then((data) => {
+      console.log("localStorage: ", data.entName)
+      if(data && data.entName){
+
+        // this.props.navigation.navigate('Browser', { entName:  data.entName })
+        
+        this.setState({
+          loginName: data.loginName
+        });
+      }
+      
+    });
+  }
+
   setModalVisible(visible) {
     this.setState({modalVisible: visible});
   }
@@ -33,22 +50,21 @@ export default class LoginScreen extends Component {
     };
   }
 
+  /**
+   * 提交
+   */
   submit = (loginName, password) =>{
 
     Toast.loading('Loading...', 10);
     
     LoginService.login(loginName, password).then(response=>{
 
-      console.log('response', response)
-
       Toast.hide()
 
       if(response.return_code == '0' && response.return_message == "Success"){
         ls.save('userInfo', response.result[0]).then(()=>{
           ls.get('userInfo').then((data) => {
-
-            console.log("save: ", data.entName)
-            this.props.navigation.navigate('Home', { entName:  data.entName })
+            this.props.navigation.navigate('Browser', { loginName: loginName, password:password, token:data.token })
           });
         })
       }else{
@@ -79,7 +95,7 @@ export default class LoginScreen extends Component {
         backgroundColor:'rgb(19,125,188)'
       }}>
         <View style={{marginTop:50}} >
-          <Image source={require('../Images/Icons/hat.png')} />
+          <Image style={{width:120,height:120}} source={require('../Images/logo.png')} />
         </View>
         <View style={{alignItems:'center'}} >
           <Text style={{color:'#F2F2F2',fontSize:20}}>绿智汇阳光采购云平台</Text>
@@ -92,6 +108,7 @@ export default class LoginScreen extends Component {
             style={styles.textInput}
             onChangeText={(loginName) => this.setState({loginName})}
             placeholder={'手机/邮箱/账号'}
+            value={this.state.loginName}
             underlineColorAndroid="rgb(45,155,212)"
           />
 
@@ -166,7 +183,7 @@ export default class LoginScreen extends Component {
             <View style={{width: 200, height: 50}}>
               <TouchableHighlight style={styles.signInHome} onPress={() => {
                 this.setModalVisible(!this.state.modalVisible)
-                navigate('Home', { entName:  this.state.entName })
+                navigate('Browser', { entName:  this.state.entName })
               }}>
                 <Text style={{fontSize:20,color:'lightblue',alignSelf:'center'}}>进入首页</Text>
               </TouchableHighlight>
