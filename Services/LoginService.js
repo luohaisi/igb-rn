@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { AppRegistry, View, Text } from 'react-native';
 
 var mock = require('./Mock.js')
-var Conf = require('./Conf.js')
+var Conf = require('../Conf/Conf.js')
 
 login = (loginName, password) => {
 

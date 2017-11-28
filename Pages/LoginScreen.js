@@ -18,13 +18,18 @@ var ls = require('react-native-local-storage');
 // Services
 var LoginService = require('../Services/LoginService.js')
 
+var Conf = require('../Conf/Conf.js')
+
+let HOST = Conf.WEB_HOME
+
+
+
 export default class LoginScreen extends Component {
 
 
   componentDidMount(){
     // 从接口请求默认数据
     ls.get('userInfo').then((data) => {
-      console.log("localStorage: ", data.entName)
       if(data && data.entName){
 
         // this.props.navigation.navigate('Browser', { entName:  data.entName })
@@ -64,7 +69,9 @@ export default class LoginScreen extends Component {
       if(response.return_code == '0' && response.return_message == "Success"){
         ls.save('userInfo', response.result[0]).then(()=>{
           ls.get('userInfo').then((data) => {
-            this.props.navigation.navigate('Browser', { loginName: loginName, password:password, token:data.token })
+
+            let url = HOST + '/home?loginName='+loginName+'&password='+password+'&token='+data.token
+            this.props.navigation.navigate('Browser', { url: url })
           });
         })
       }else{

@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { AppRegistry, StyleSheet, FlatList, Text, Image, View, TouchableOpacity } from 'react-native';
 import { Button, Toast } from 'antd-mobile';
 
-import SettingItem from '../Components/Common/SettingItem';
+// import SettingItem from '../Components/Common/SettingItem';
+
+var ls = require('react-native-local-storage');
 
 export default class SettingScreen extends Component {
 
@@ -19,11 +21,10 @@ export default class SettingScreen extends Component {
   };
 
   logout = () =>{
-    
-        Toast.loading('退出', 1, () => {
-    
-          // console.log('Load complete !!!');
-        });
+    ls.clear().then(()=>{
+      Toast.loading('退出成功', 1);
+      this.props.navigation.navigate('Login')
+    })
   }
 
   render() {

@@ -37,7 +37,7 @@ export default class AboutUsScreen extends Component {
 
     renderIconView = (type) => {
       if(type == 'string'){
-        return <Text style={{color:'#999'}}>0.1.0</Text>
+        return <Text style={{color:'#999'}}>0.1.3</Text>
       }else{
         return <Image source={require('../Images/Icons/right.png')}  style={styles.icon} />
       }

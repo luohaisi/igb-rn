@@ -1,52 +1,151 @@
 import React, { Component } from 'react';
-import { AppRegistry, View, WebView, Modal, Text, Image, TouchableHighlight } from 'react-native';
+import {
+  AppRegistry, 
+  StyleSheet, 
+  Platform,
+  BackHandler,
+  WebView,
+  Modal, 
+  View,  
+  Text, 
+  Image, 
+  TouchableHighlight, 
+  TouchableOpacity 
+} from 'react-native';
 
-import { Toast } from 'antd-mobile';
+var WEBVIEW_REF = 'webview';
 
 export default class BrowserScreen extends Component {
+
+  static navigationOptions = {
+    header: null,
+  }; 
 
   constructor(props) {
     super(props);
     this.state = {
-      modalVisible: true
+      title:'',
+      modalVisible: true,
+      backButtonEnabled: false,
+      forwardButtonEnabled: false,
     };
   }
 
   componentDidMount(){
-    // Toast.loading('Loading...', 10);
+
   }
 
-  setModalVisible(visible) {
-    this.setState({modalVisible: visible});
+  componentWillMount() {
+
+    that = this
+    if (Platform.OS === 'android') {
+      BackHandler.addEventListener('hardwareBackPress', function() {
+        if (that.state.backButtonEnabled) {
+          that.goBack();
+          return true;
+        }
+        return false;
+       });
+
+    }
+  }
+  componentWillUnmount() {
+    if (Platform.OS === 'android') {
+      BackHandler.removeEventListener('hardwareBackPress', this.onBackAndroid);
+    }
   }
 
-
-  static navigationOptions = {
-    header: null,
+  onBackAndroid = () => {
+    return false;
   };
+
+
+  onNavigationStateChange = (navState) => {
+    this.setState({
+      backButtonEnabled: navState.canGoBack,
+      forwardButtonEnabled: navState.canGoForward,
+      title: navState.title
+    });
+  };
+
+  goBack = () => {
+    this.refs[WEBVIEW_REF].goBack();
+  };
+
+  goForward = () => {
+    this.refs[WEBVIEW_REF].goForward();
+  };
+
 
   render() {
 
+    const { navigate } = this.props.navigation;
+
     const { state } = this.props.navigation;
+    const { url } = state.params;
 
-    const { loginName, password, token } = state.params;
+    let jsCode = `
+        document.querySelector('body').style.backgroundColor = 'red';
+    `;
 
-    console.info('state', loginName + password + token )
-
-    let HOST = 'http://101.132.47.27:3000'
-
-    let url = HOST + '/home?loginName='+loginName+'&password='+password+'&token='+token
+    let jsdCode = `
+        localStorage.set('inject', 'getIn');
+    `;
 
     return (
+      
       <View style={{flex:1}}>
-          <WebView style={{flex:1}} source={{uri: url}}
-                  onLoad={() => {
-                      const t = setInterval(() => {
-                        this.setModalVisible(!this.state.modalVisible)
-                        clearInterval(t)
-                      }, 1000);
+          
+        <View style={[styles.addressBarRow]}>
 
-                  }}/>
+          <View style={{flex: 1, flexDirection: 'row',alignItems:'center'}}>
+            <View style={{flex: 1}}>
+
+              <TouchableOpacity style={this.state.backButtonEnabled ? styles.disabledButton : ''} onPress={() => navigate('Setting')} >
+                <Image source={require('../Images/Icons/settings_light.png')} style={{width:30,height:30}} />
+              </TouchableOpacity>
+            
+              <TouchableOpacity
+                onPress={this.goBack}
+                style={this.state.backButtonEnabled ? styles.navButton : styles.disabledButton}>
+                <Text style={{color : '#F2F2F2'}}>
+                  {'<'}
+                </Text>
+              </TouchableOpacity>
+
+            </View>
+            <View style={{flex: 5, alignItems:'center', justifyContent:'center'}} >
+              <Text style={{color : '#F2F2F2'}}>{this.state.title}</Text>
+            </View>
+            <View style={{flex: 1}} >
+              <TouchableOpacity
+                onPress={this.goForward}
+                style={this.state.forwardButtonEnabled ? styles.navButton : styles.disabledButton}>
+                <Text style={{color : '#F2F2F2'}}>
+                  {'>'}
+                </Text>
+              </TouchableOpacity>
+            </View>
+
+          </View>
+
+        </View>
+
+          <WebView style={{flex:1}} source={{uri: url}}
+                  ref={WEBVIEW_REF}
+                  onLoadStart={() => {
+                    this.setState({modalVisible: true})
+                  }}
+                  onLoadEnd={()=>{
+                    this.setState({modalVisible: false})
+                  }}
+                  onNavigationStateChange={(e)=>this.onNavigationStateChange(e)}
+                  injectJavaScript={(e)=>console.info('injectJavaScript', e)}
+                  injectedJavaScript={jsdCode}
+          />
+
+
+
 
           <Modal
             animationType="fade"
@@ -68,6 +167,26 @@ export default class BrowserScreen extends Component {
     );
   }
 };
+
+const styles = StyleSheet.create({
+  addressBarRow: {
+    flexDirection: 'row',
+    padding: 8,
+    backgroundColor:'#117BE9'
+  },
+  disabledButton: {
+    display:'none'
+  },
+  navButton: {
+    width: 20,
+    padding: 3,
+    marginRight: 3,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderColor: 'transparent',
+    borderRadius: 3,
+  },
+});
 
 // skip this line if using Create React Native App
 AppRegistry.registerComponent('IGreenBuy', () => BrowserScreen);
