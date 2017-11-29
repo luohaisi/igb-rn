@@ -13,7 +13,11 @@ import {
   TouchableOpacity 
 } from 'react-native';
 
+import { Toast } from 'antd-mobile';
+
 var WEBVIEW_REF = 'webview';
+
+let count = 0
 
 export default class BrowserScreen extends Component {
 
@@ -44,11 +48,22 @@ export default class BrowserScreen extends Component {
           that.goBack();
           return true;
         }
-        return false;
+        console.info('routeName', that.props.navigation.state.routeName)
+        // 第一次按后退提示再按退出
+        count++
+        if(count > 1 && that.props.navigation.state.routeName == 'Browser')
+          BackHandler.exitApp()
+        Toast.info('再按一次返回键退出',1);
+
+        // 3秒钟后设置count=0 重新计算
+        setTimeout(()=>count = 0,3000)
+
+        return true;
        });
 
     }
   }
+
   componentWillUnmount() {
     if (Platform.OS === 'android') {
       BackHandler.removeEventListener('hardwareBackPress', this.onBackAndroid);
@@ -58,7 +73,6 @@ export default class BrowserScreen extends Component {
   onBackAndroid = () => {
     return false;
   };
-
 
   onNavigationStateChange = (navState) => {
     this.setState({
@@ -76,6 +90,19 @@ export default class BrowserScreen extends Component {
     this.refs[WEBVIEW_REF].goForward();
   };
 
+  reload = () => {
+    this.refs[WEBVIEW_REF].reload();
+  }
+
+  renderError(errorDomain, errorCode, errorDesc) {
+    return (
+      <View style={styles.error}>
+        <TouchableOpacity style={styles.button} onPress={this.reload}>
+          <Text style={{color:'white'}}>重新加载</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
 
   render() {
 
@@ -85,11 +112,14 @@ export default class BrowserScreen extends Component {
     const { url } = state.params;
 
     let jsCode = `
-        document.querySelector('body').style.backgroundColor = 'red';
+        document.querySelector('am-navbar-title').style.backgroundColor = 'red';
     `;
 
     let jsdCode = `
-        localStorage.set('inject', 'getIn');
+      window.postMessage(data, JSON.stringify({
+        action: 'DATE_PICKER',
+        payload: payload
+      }));
     `;
 
     return (
@@ -108,23 +138,17 @@ export default class BrowserScreen extends Component {
               <TouchableOpacity
                 onPress={this.goBack}
                 style={this.state.backButtonEnabled ? styles.navButton : styles.disabledButton}>
-                <Text style={{color : '#F2F2F2'}}>
-                  {'<'}
-                </Text>
+                <Image source={require('../Images/Icons/back.png')} style={{width:30,height:30}} />
               </TouchableOpacity>
 
             </View>
             <View style={{flex: 5, alignItems:'center', justifyContent:'center'}} >
-              <Text style={{color : '#F2F2F2'}}>{this.state.title}</Text>
-            </View>
-            <View style={{flex: 1}} >
-              <TouchableOpacity
-                onPress={this.goForward}
-                style={this.state.forwardButtonEnabled ? styles.navButton : styles.disabledButton}>
-                <Text style={{color : '#F2F2F2'}}>
-                  {'>'}
-                </Text>
+              <TouchableOpacity onPress={this.reload}>
+                <Text style={{color : '#F2F2F2'}}>{this.state.title}</Text>
               </TouchableOpacity>
+            </View>
+            <View style={{flex: 1,alignItems:'flex-end'}} >
+
             </View>
 
           </View>
@@ -139,9 +163,14 @@ export default class BrowserScreen extends Component {
                   onLoadEnd={()=>{
                     this.setState({modalVisible: false})
                   }}
+                  onMessage={(event)=>{
+                    this.setState({title: event.nativeEvent.data})
+                    alert(event.nativeEvent.data)
+                  }}
                   onNavigationStateChange={(e)=>this.onNavigationStateChange(e)}
-                  injectJavaScript={(e)=>console.info('injectJavaScript', e)}
-                  injectedJavaScript={jsdCode}
+                  renderError={this.renderError}
+                  // injectJavaScript={}
+                  // injectedJavaScript={jsCode}
           />
 
 
@@ -186,6 +215,19 @@ const styles = StyleSheet.create({
     borderColor: 'transparent',
     borderRadius: 3,
   },
+  error: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  button: {
+    backgroundColor: '#FF0000',
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 12,
+    borderRadius: 3
+  }
 });
 
 // skip this line if using Create React Native App
