@@ -28,7 +28,7 @@ export default class BrowserScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      title:'',
+      title:'阳光采购',
       modalVisible: true,
       backButtonEnabled: false,
       forwardButtonEnabled: false,
@@ -48,7 +48,7 @@ export default class BrowserScreen extends Component {
           that.goBack();
           return true;
         }
-        console.info('routeName', that.props.navigation.state.routeName)
+        // console.info('routeName', that.props.navigation.state.routeName)
         // 第一次按后退提示再按退出
         count++
         if(count > 1 && that.props.navigation.state.routeName == 'Browser')
@@ -78,7 +78,7 @@ export default class BrowserScreen extends Component {
     this.setState({
       backButtonEnabled: navState.canGoBack,
       forwardButtonEnabled: navState.canGoForward,
-      title: navState.title
+      // title: navState.title
     });
   };
 
@@ -102,6 +102,17 @@ export default class BrowserScreen extends Component {
         </TouchableOpacity>
       </View>
     );
+  }
+
+  _onMessage = (event)=>{
+    let message = JSON.parse(event.nativeEvent.data)
+    if(message.title){
+      this.setState({title: message.title})
+    }
+    if(message.backButtonEnabled){
+      this.setState({backButtonEnabled: message.backButtonEnabled})
+    }
+    console.log(event.nativeEvent.data)
   }
 
   render() {
@@ -163,10 +174,7 @@ export default class BrowserScreen extends Component {
                   onLoadEnd={()=>{
                     this.setState({modalVisible: false})
                   }}
-                  onMessage={(event)=>{
-                    this.setState({title: event.nativeEvent.data})
-                    alert(event.nativeEvent.data)
-                  }}
+                  onMessage={this._onMessage}
                   onNavigationStateChange={(e)=>this.onNavigationStateChange(e)}
                   renderError={this.renderError}
                   // injectJavaScript={}
