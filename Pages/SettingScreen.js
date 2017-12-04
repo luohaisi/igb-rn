@@ -1,12 +1,31 @@
 import React, { Component } from 'react';
-import { AppRegistry, StyleSheet, FlatList, Text, Image, View, TouchableOpacity } from 'react-native';
+import { 
+  AppRegistry, 
+  StyleSheet,
+  FlatList, 
+  Text, 
+  Image, 
+  View, 
+  TouchableOpacity 
+} from 'react-native';
 import { Button, Toast } from 'antd-mobile';
 
 // import SettingItem from '../Components/Common/SettingItem';
 
+// Services
+var LoginService = require('../Services/LoginService.js')
+
 var ls = require('react-native-local-storage');
 
 export default class SettingScreen extends Component {
+
+  componentWillMount() {
+    TheBrowser.isBrowserPage()
+  }
+
+  componentWillUnmount() {
+    TheBrowser.isBrowserPage()
+  }
 
   static navigationOptions = {
     headerTitle: '设置',
@@ -21,10 +40,31 @@ export default class SettingScreen extends Component {
   };
 
   logout = () =>{
-    ls.clear().then(()=>{
-      Toast.loading('退出成功', 1);
-      this.props.navigation.navigate('Login')
-    })
+
+    Toast.loading('Loading...', 10);
+
+    ls.get('userInfo').then((data) => {
+
+      LoginService.logout(data.loginName, data.password, data.token).then(response=>{
+
+        console.info('logout', response)
+        
+        Toast.hide()
+  
+        if(response.return_code == '0' && response.return_message == "Success"){
+  
+            ls.clear().then(()=>{
+              Toast.loading('退出成功', 1);
+              this.props.navigation.navigate('Login')
+            })
+        }else{
+          Toast.fail(response.return_message, 2);
+        }
+  
+      });
+
+    });
+    
   }
 
   render() {

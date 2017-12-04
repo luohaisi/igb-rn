@@ -32,6 +32,7 @@ export default class BrowserScreen extends Component {
       modalVisible: true,
       backButtonEnabled: false,
       forwardButtonEnabled: false,
+      isBrowserPage:true
     };
   }
 
@@ -41,17 +42,28 @@ export default class BrowserScreen extends Component {
 
   componentWillMount() {
 
-    that = this
+    TheBrowser = this
+
+    this._addBackHandler()
+    
+  }
+
+  _addBackHandler = () => {
     if (Platform.OS === 'android') {
       BackHandler.addEventListener('hardwareBackPress', function() {
-        if (that.state.backButtonEnabled) {
-          that.goBack();
+        console.log('routeName', TheBrowser.props.navigation.state.routeName)
+        // 如果不是浏览器页面,不作为
+        if(TheBrowser.state.isBrowserPage != true)
+          return false
+
+        if (TheBrowser.state.backButtonEnabled) {
+          TheBrowser.goBack();
           return true;
         }
-        // console.info('routeName', that.props.navigation.state.routeName)
+        // console.info('routeName', TheBrowser.props.navigation.state.routeName)
         // 第一次按后退提示再按退出
         count++
-        if(count > 1 && that.props.navigation.state.routeName == 'Browser')
+        if(count > 1 && TheBrowser.props.navigation.state.routeName == 'Browser')
           BackHandler.exitApp()
         Toast.info('再按一次返回键退出',1);
 
@@ -64,17 +76,30 @@ export default class BrowserScreen extends Component {
     }
   }
 
-  componentWillUnmount() {
+  _removeBackHandler = () => {
     if (Platform.OS === 'android') {
-      BackHandler.removeEventListener('hardwareBackPress', this.onBackAndroid);
+      BackHandler.removeEventListener('hardwareBackPress', TheBrowser.onBackAndroid);
     }
   }
 
+  // componentWillUnmount() {
+  //   this._removeBackHandler()
+  // }
+
   onBackAndroid = () => {
-    return false;
+    console.log('onBackAndroid')
+    return true;
   };
 
+  isBrowserPage = () => {
+    TheBrowser.setState({
+      isBrowserPage: !TheBrowser.state.isBrowserPage
+    });
+  }
+
   onNavigationStateChange = (navState) => {
+    console.log('onNavigationStateChange')
+
     this.setState({
       backButtonEnabled: navState.canGoBack,
       forwardButtonEnabled: navState.canGoForward,
@@ -94,6 +119,11 @@ export default class BrowserScreen extends Component {
     this.refs[WEBVIEW_REF].reload();
   }
 
+  _goSetting = () => {
+
+    this.props.navigation.navigate('Setting')
+  }
+
   renderError(errorDomain, errorCode, errorDesc) {
     return (
       <View style={styles.error}>
@@ -106,13 +136,18 @@ export default class BrowserScreen extends Component {
 
   _onMessage = (event)=>{
     let message = JSON.parse(event.nativeEvent.data)
+
     if(message.title){
       this.setState({title: message.title})
     }
-    if(message.backButtonEnabled){
-      this.setState({backButtonEnabled: message.backButtonEnabled})
+
+    if(message.backBtnEnabled){
+      this.setState({backButtonEnabled: message.backBtnEnabled})
+    }else{
+      this.setState({backButtonEnabled: false})
     }
-    console.log(event.nativeEvent.data)
+
+    console.log('_onMessage', event.nativeEvent.data)
   }
 
   render() {
@@ -142,7 +177,8 @@ export default class BrowserScreen extends Component {
           <View style={{flex: 1, flexDirection: 'row',alignItems:'center'}}>
             <View style={{flex: 1}}>
 
-              <TouchableOpacity style={this.state.backButtonEnabled ? styles.disabledButton : ''} onPress={() => navigate('Setting')} >
+              <TouchableOpacity style={this.state.backButtonEnabled ? styles.disabledButton : ''}
+                                onPress={this._goSetting} >
                 <Image source={require('../Images/Icons/settings_light.png')} style={{width:30,height:30}} />
               </TouchableOpacity>
             
@@ -183,7 +219,6 @@ export default class BrowserScreen extends Component {
 
 
 
-
           <Modal
             animationType="fade"
             transparent={true}
@@ -196,7 +231,7 @@ export default class BrowserScreen extends Component {
               </View>
               <View style={{flex:1,alignItems:'center',justifyContent:'flex-end',marginBottom:20}}>
                 <Image style={{width:32,height:32}} source={require('../Images/loading.png')} />
-                <Text style={{color:'#F2F2F2'}}>Loading...</Text>
+                <Text style={{color:'#F2F2F2'}}>正在初始化应用,请稍后...</Text>
               </View>
             </View>
           </Modal>

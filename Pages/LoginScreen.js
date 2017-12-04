@@ -67,10 +67,17 @@ export default class LoginScreen extends Component {
       Toast.hide()
 
       if(response.return_code == '0' && response.return_message == "Success"){
-        ls.save('userInfo', response.result[0]).then(()=>{
+        let userInfo = response.result[0]
+        if(userInfo){
+          userInfo.password = password
+        }
+        ls.save('userInfo', userInfo).then(()=>{
           ls.get('userInfo').then((data) => {
-
-            let url = HOST + '/home?loginName='+loginName+'&password='+password+'&token='+data.token
+            let url = HOST + '/home?loginName=' + loginName 
+                           + '&password='+ password 
+                           + '&token='+ data.token
+                           + '&hideHeader=true'
+            console.log('website', url)
             this.props.navigation.navigate('Browser', { url: url })
           });
         })
@@ -101,10 +108,10 @@ export default class LoginScreen extends Component {
         alignItems: 'center',
         backgroundColor:'rgb(19,125,188)'
       }}>
-        <View style={{marginTop:50}} >
-          <Image style={{width:120,height:120}} source={require('../Images/logo.png')} />
+        <View style={{marginTop:100}} >
+          <Image style={{width:120,height:75}} source={require('../Images/logo.png')} />
         </View>
-        <View style={{alignItems:'center'}} >
+        <View style={{alignItems:'center',marginTop:30}} >
           <Text style={{color:'#F2F2F2',fontSize:20}}>绿智汇阳光采购云平台</Text>
           <WhiteSpace/>
           <Text style={{color:'#ccc',fontSize:16}}>Welcome To Our App</Text>
