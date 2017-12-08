@@ -51,7 +51,7 @@ export default class BrowserScreen extends Component {
   _addBackHandler = () => {
     if (Platform.OS === 'android') {
       BackHandler.addEventListener('hardwareBackPress', function() {
-        console.log('routeName', TheBrowser.props.navigation.state.routeName)
+
         // 如果不是浏览器页面,不作为
         if(TheBrowser.state.isBrowserPage != true)
           return false
@@ -60,7 +60,6 @@ export default class BrowserScreen extends Component {
           TheBrowser.goBack();
           return true;
         }
-        // console.info('routeName', TheBrowser.props.navigation.state.routeName)
         // 第一次按后退提示再按退出
         count++
         if(count > 1 && TheBrowser.props.navigation.state.routeName == 'Browser')
@@ -157,22 +156,11 @@ export default class BrowserScreen extends Component {
     const { state } = this.props.navigation;
     const { url } = state.params;
 
-    let jsCode = `
-        document.querySelector('am-navbar-title').style.backgroundColor = 'red';
-    `;
-
-    let jsdCode = `
-      window.postMessage(data, JSON.stringify({
-        action: 'DATE_PICKER',
-        payload: payload
-      }));
-    `;
-
     return (
       
       <View style={{flex:1}}>
           
-        <View style={[styles.addressBarRow]}>
+        <View style={[styles.addressBarRow,Platform.OS === 'ios' ? styles.addressBarRowIOS : '']}>
 
           <View style={{flex: 1, flexDirection: 'row',alignItems:'center'}}>
             <View style={{flex: 1}}>
@@ -204,7 +192,7 @@ export default class BrowserScreen extends Component {
 
           <WebView style={{flex:1}} source={{uri: url}}
                   ref={WEBVIEW_REF}
-                  onLoadStart={() => {
+                  onLoad={() => {
                     this.setState({modalVisible: true})
                   }}
                   onLoadEnd={()=>{
@@ -213,8 +201,6 @@ export default class BrowserScreen extends Component {
                   onMessage={this._onMessage}
                   onNavigationStateChange={(e)=>this.onNavigationStateChange(e)}
                   renderError={this.renderError}
-                  // injectJavaScript={}
-                  // injectedJavaScript={jsCode}
           />
 
 
@@ -245,6 +231,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     padding: 8,
     backgroundColor:'#117BE9'
+  },
+  addressBarRowIOS: {
+    paddingTop: 28
   },
   disabledButton: {
     display:'none'

@@ -42,16 +42,12 @@ export default class LoginScreen extends Component {
     });
   }
 
-  setModalVisible(visible) {
-    this.setState({modalVisible: visible});
-  }
 
   constructor(props) {
     super(props);
     this.state = {
       loginName: '',
-      password: '',
-      modalVisible: false
+      password: ''
     };
   }
 
@@ -146,7 +142,7 @@ export default class LoginScreen extends Component {
           </Button>
 
           <WhiteSpace/>
-
+{/* 
           <View style={{height: 50}}>
             <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
               <View style={{width: '50%', height: 50, alignItems:'center'}}>
@@ -156,12 +152,13 @@ export default class LoginScreen extends Component {
                 <Text style={{color:'#ccc'}}>忘记密码?</Text>
               </View>
             </View>
-          </View>
+          </View> 
+*/}
 
         </View>        
 
         <View style={{height: 100}} >
-          
+{/*           
           <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
             <View style={{width: '15%', height: 50, alignItems:'center'}}>
               <Image source={require('../Images/Icons/weibo.png')} style={{width:32,height:32}} />
@@ -173,37 +170,9 @@ export default class LoginScreen extends Component {
               <Image source={require('../Images/Icons/alipay.png')} style={{width:32,height:32}} />
             </View>
           </View>
+*/}
+          
         </View>
-
-        <Modal
-          animationType="slide"
-          transparent={false}
-          visible={this.state.modalVisible}
-          onRequestClose={() => {alert("Modal has been closed.")}}
-          >
-
-          <View style={{
-            flex: 1,
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-            <View style={{width: 200, height: 50, backgroundColor: 'powderblue'}}>
-              <Text>用户名: {this.state.loginName}</Text>
-            </View>
-            <View style={{width: 200, height: 50, backgroundColor: 'skyblue'}}>
-              <Text>密码: {this.state.password}</Text>
-            </View>
-            <View style={{width: 200, height: 50}}>
-              <TouchableHighlight style={styles.signInHome} onPress={() => {
-                this.setModalVisible(!this.state.modalVisible)
-                navigate('Browser', { entName:  this.state.entName })
-              }}>
-                <Text style={{fontSize:20,color:'lightblue',alignSelf:'center'}}>进入首页</Text>
-              </TouchableHighlight>
-            </View>
-          </View>
-        </Modal>
 
       </View>
     );
