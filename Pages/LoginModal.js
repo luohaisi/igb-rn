@@ -5,8 +5,7 @@ import {
   Text, 
   TextInput, 
   View, 
-  Image, 
-  Modal,
+  Image,
   TouchableHighlight
 
 } from 'react-native';
@@ -24,7 +23,7 @@ let HOST = Conf.WEB_HOME
 
 
 
-export default class LoginScreen extends Component {
+export default class LoginModal extends Component {
 
 
   componentDidMount(){
@@ -74,7 +73,8 @@ export default class LoginScreen extends Component {
                            + '&token='+ data.token
                            + '&hideHeader=true'
             console.log('website', url)
-            this.props.navigation.navigate('Browser', { url: url })
+            // this.props.navigation.navigate('Browser', { url: url })
+            // y
           });
         })
       }else{
@@ -85,13 +85,8 @@ export default class LoginScreen extends Component {
     });    
   }
 
-  static navigationOptions = {
-    header: null,
-  };
 
   render() {
-
-    const { navigate } = this.props.navigation;
 
     return (
       // Try setting `alignItems` to 'flex-start'
@@ -211,4 +206,4 @@ const styles = StyleSheet.create({
 });
 
 // skip this line if using Create React Native App
-AppRegistry.registerComponent('IGreenBuy', () => LoginScreen);
+AppRegistry.registerComponent('IGreenBuy', () => LoginModal);

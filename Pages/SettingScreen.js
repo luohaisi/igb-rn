@@ -54,8 +54,13 @@ export default class SettingScreen extends Component {
         if(response.return_code == '0' && response.return_message == "Success"){
   
             ls.clear().then(()=>{
+              TheBrowser.setState({
+                showLoginModal:true,
+                loginName: '',
+                password: ''
+              })
               Toast.loading('退出成功', 1);
-              this.props.navigation.navigate('Login')
+              this.props.navigation.goBack()
             })
         }else{
           Toast.fail(response.return_message, 2);

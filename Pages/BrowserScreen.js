@@ -9,15 +9,28 @@ import {
   View,  
   Text, 
   Image, 
+  TextInput, 
   TouchableHighlight, 
-  TouchableOpacity 
+  TouchableOpacity,
+  Alert
 } from 'react-native';
 
-import { Toast } from 'antd-mobile';
+import { Toast, Button, WhiteSpace } from 'antd-mobile';
+
+// import LoginModal from './LoginModal';
+
+var ls = require('react-native-local-storage');
 
 var WEBVIEW_REF = 'webview';
 
 let count = 0
+
+// Services
+var LoginService = require('../Services/LoginService.js')
+
+var Conf = require('../Conf/Conf.js')
+
+let HOST = Conf.WEB_HOME
 
 export default class BrowserScreen extends Component {
 
@@ -28,16 +41,31 @@ export default class BrowserScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      title:'阳光采购',
-      modalVisible: true,
+      title: '阳光采购',
+      modalVisible: false,
+      showLoginModal: true,
+      website: HOST + '/launch',
       backButtonEnabled: false,
       forwardButtonEnabled: false,
-      isBrowserPage:true
+      isBrowserPage: true,
+      loginName: '',
+      password: ''
     };
   }
 
   componentDidMount(){
+    // 从接口请求默认数据
+    ls.get('userInfo').then((data) => {
+      if(data && data.entName){
 
+        // this.props.navigation.navigate('Browser', { entName:  data.entName })
+        
+        this.setState({
+          loginName: data.loginName
+        });
+      }
+      
+    });
   }
 
   componentWillMount() {
@@ -115,22 +143,12 @@ export default class BrowserScreen extends Component {
   };
 
   reload = () => {
-    this.refs[WEBVIEW_REF].reload();
+    // this.refs[WEBVIEW_REF].reload();
   }
 
   _goSetting = () => {
 
     this.props.navigation.navigate('Setting')
-  }
-
-  renderError(errorDomain, errorCode, errorDesc) {
-    return (
-      <View style={styles.error}>
-        <TouchableOpacity style={styles.button} onPress={this.reload}>
-          <Text style={{color:'white'}}>重新加载</Text>
-        </TouchableOpacity>
-      </View>
-    );
   }
 
   _onMessage = (event)=>{
@@ -149,12 +167,126 @@ export default class BrowserScreen extends Component {
     console.log('_onMessage', event.nativeEvent.data)
   }
 
+  renderError(errorDomain, errorCode, errorDesc) {
+    return (
+      <View style={styles.error}>
+        <TouchableOpacity style={styles.button} onPress={this.reload}>
+          <Text style={{color:'white'}}>重新加载</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
+
+    /**
+   * 提交
+   */
+  submit = (loginName, password) =>{
+
+    Toast.loading('Loading...', 10);
+    
+    LoginService.login(loginName, password).then(response=>{
+
+      Toast.hide()
+
+      if(response.return_code == '0' && response.return_message == "Success"){
+        let userInfo = response.result[0]
+        if(userInfo){
+          userInfo.password = password
+        }
+        ls.save('userInfo', userInfo).then(()=>{
+          ls.get('userInfo').then((data) => {
+            let url = HOST + '?loginName=' + loginName 
+                           + '&password='+ password 
+                           + '&token='+ data.token
+                           + '&hideHeader=true'
+            console.log('website', url)
+            this.setState({
+              website:url
+            })
+
+
+            this.setState({
+              showLoginModal: false
+            })
+            // this.props.navigation.navigate('Browser', { url: url })
+            // y
+          });
+        })
+      }else{
+        Toast.fail(response.return_message, 2);
+        Alert.alert(response.return_message)
+      }
+      
+
+    });    
+  }
+
+  renderLoginModal(){
+
+    return (
+      <View style={{
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        backgroundColor:'rgb(19,125,188)'
+      }}>
+        <View style={{marginTop:100}} >
+          <Image style={{width:120,height:75}} source={require('../Images/logo.png')} />
+        </View>
+        <View style={{alignItems:'center',marginTop:30}} >
+          <Text style={{color:'#F2F2F2',fontSize:20}}>绿智汇阳光采购云平台</Text>
+          <WhiteSpace/>
+          <Text style={{color:'#ccc',fontSize:16}}>Welcome To Our App</Text>
+        </View>
+        <View style={{width: '80%'}}>          
+
+          <TextInput
+            style={styles.textInput}
+            onChangeText={(loginName) => this.setState({loginName})}
+            placeholder={'手机/邮箱/账号'}
+            value={this.state.loginName}
+            underlineColorAndroid="rgb(45,155,212)"
+          />
+
+          <WhiteSpace/>
+
+          <TextInput
+            secureTextEntry={true}
+            style={styles.textInput}
+            onChangeText={(password) => this.setState({password})}
+            placeholder={'密码'}
+            underlineColorAndroid="rgb(45,155,212)"
+          />
+
+          <WhiteSpace size='xl' />
+
+          <Button type="primary" 
+                  inline 
+                  onClick={()=>this.submit(this.state.loginName, this.state.password)} 
+                  style={styles.submitButton} 
+                  color="#f2f2f2">登入
+          </Button>
+
+          <WhiteSpace/>
+
+        </View>        
+
+        <View style={{height: 100}} >
+          
+        </View>
+
+      </View>
+    );
+  }
+
   render() {
 
     const { navigate } = this.props.navigation;
 
     const { state } = this.props.navigation;
-    const { url } = state.params;
+    // const { url } = state.params;
 
     return (
       
@@ -190,10 +322,10 @@ export default class BrowserScreen extends Component {
 
         </View>
 
-          <WebView style={{flex:1}} source={{uri: url}}
+          <WebView style={{flex:1}} source={{uri: this.state.website}}
                   ref={WEBVIEW_REF}
                   onLoad={() => {
-                    this.setState({modalVisible: true})
+                    // this.setState({modalVisible: true})
                   }}
                   onLoadEnd={()=>{
                     this.setState({modalVisible: false})
@@ -203,7 +335,14 @@ export default class BrowserScreen extends Component {
                   renderError={this.renderError}
           />
 
-
+          <Modal
+            animationType="fade"
+            transparent={true}
+            visible={this.state.showLoginModal}
+            onRequestClose={() => {}}
+            >
+              {this.renderLoginModal()}
+          </Modal>
 
           <Modal
             animationType="fade"
@@ -259,7 +398,35 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 12,
     borderRadius: 3
-  }
+  },
+  textInput:{
+    height: 50, 
+    backgroundColor: 'rgb(45,155,212)',
+    paddingLeft: 20,
+    color:'#F2F2F2',
+    fontSize:16
+    // borderColor: 'gray', 
+    // borderWidth: 1
+  },
+  submitButton:{
+    height: 50, 
+    backgroundColor: 'rgb(19,125,188)',
+    borderColor:'rgb(131,194,148)',
+    borderRadius:50,
+  },
+  signInHome:{
+    width: 200, 
+    height: 50, 
+    backgroundColor:'#f2f2f2',
+  },
+  bigblue: {
+    color: 'blue',
+    fontWeight: 'bold',
+    fontSize: 30,
+  },
+  red: {
+    color: 'red',
+  },
 });
 
 // skip this line if using Create React Native App
