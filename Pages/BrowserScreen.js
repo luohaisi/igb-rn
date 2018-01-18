@@ -167,6 +167,14 @@ export default class BrowserScreen extends Component {
     console.log('_onMessage', event.nativeEvent.data)
   }
 
+  _goSearch = () => {
+    Alert.alert('敬请期待！')
+  }
+
+  _goMail = () => {
+    Alert.alert('敬请期待！')
+  }
+
   renderError(errorDomain, errorCode, errorDesc) {
     return (
       <View style={styles.error}>
@@ -309,13 +317,22 @@ export default class BrowserScreen extends Component {
               </TouchableOpacity>
 
             </View>
-            <View style={{flex: 5, alignItems:'center', justifyContent:'center'}} >
+            <View style={{flex: 4, alignItems:'center', justifyContent:'center'}} >
               <TouchableOpacity onPress={this.reload}>
                 <Text style={{color : '#F2F2F2'}}>{this.state.title}</Text>
               </TouchableOpacity>
             </View>
             <View style={{flex: 1,alignItems:'flex-end'}} >
-
+              <TouchableOpacity style={this.state.backButtonEnabled ? styles.disabledButton : ''}
+                                onPress={this._goSearch} >
+                <Image source={require('../Images/Icons/search.png')} style={{width:30,height:30}} />
+              </TouchableOpacity>
+            </View>
+            <View style={{flex: 1,alignItems:'flex-end'}} >
+              <TouchableOpacity style={this.state.backButtonEnabled ? styles.disabledButton : ''}
+                                onPress={this._goMail} >
+                <Image source={require('../Images/Icons/mail.png')} style={{width:30,height:30}} />
+              </TouchableOpacity>
             </View>
 
           </View>
