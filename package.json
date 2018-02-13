@@ -1,5 +1,5 @@
 {
-  "name": "someProject",
+  "name": "AwesomeProject",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -7,19 +7,19 @@
     "test": "jest"
   },
   "dependencies": {
-    "antd-mobile": "^2.0.3",
-    "react": "16.0.0",
-    "react-native": "0.50.3",
+    "antd-mobile": "^2.1.6",
+    "react": "16.2.0",
+    "react-dom": "^16.2.0",
+    "react-native": "0.53.0",
     "react-native-local-storage": "^1.5.2",
-    "react-native-scrollable-tab-view": "^0.8.0",
-    "react-navigation": "^1.0.0-beta.19"
+    "react-navigation": "^1.0.3"
   },
   "devDependencies": {
-    "babel-jest": "21.2.0",
-    "babel-plugin-import": "^1.6.2",
+    "babel-jest": "22.2.2",
+    "babel-plugin-import": "^1.6.3",
     "babel-preset-react-native": "4.0.0",
-    "jest": "21.2.1",
-    "react-test-renderer": "16.0.0"
+    "jest": "22.2.2",
+    "react-test-renderer": "16.2.0"
   },
   "jest": {
     "preset": "react-native"

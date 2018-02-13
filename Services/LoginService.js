@@ -1,7 +1,5 @@
-import React, { Component } from 'react';
-import { AppRegistry, View, Text } from 'react-native';
 
-var Conf = require('../Conf/Conf.js')
+var Conf = require('../Conf/Host.js')
 
 login = (loginName, password) => {
 
@@ -56,6 +54,3 @@ module.exports = {
     login: login,
     logout: logout
   }
-
-// skip this line if using Create React Native App
-// AppRegistry.registerComponent('IGreenBuy', () => LoginService);

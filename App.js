@@ -1,35 +1,23 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, ScrollView, Button, TouchableOpacity, WebView } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
-// import LoginScreen from './Pages/LoginScreen';
+export default class App extends React.Component {
+  render() {
+    return (
+      <View style={styles.container}>
+        <Text>Open up App.js to start working on your app!</Text>
+        <Text>Changes you make will automatically reload.</Text>
+        <Text>Shake your phone to open the developer menu.</Text>
+      </View>
+    );
+  }
+}
 
-import BrowserScreen from './Pages/BrowserScreen';
-
-// import HomeScreen from './Pages/HomeScreen';
-import WebScreen from './Pages/WebScreen';
-import SettingScreen from './Pages/SettingScreen';
-import PasswordScreen from './Pages/PasswordScreen';
-import FeedbackScreen from './Pages/FeedbackScreen';
-import ClearCacheScreen from './Pages/ClearCacheScreen';
-import AboutUsScreen from './Pages/AboutUsScreen';
-
-import { StackNavigator } from 'react-navigation';
-
-// 路由导航
-const App = StackNavigator({
-  
-  // Login: { screen: LoginScreen },
-  // Home: { screen: HomeScreen },
-  // Browser:{screen: BrowserScreen},
-  Web:{screen: WebScreen},
-  Setting:{screen: SettingScreen},
-  // 设置内页
-  Password:{screen:PasswordScreen},
-  ClearCache:{screen:ClearCacheScreen},
-  Feedback:{screen:FeedbackScreen},
-  AboutUs:{screen:AboutUsScreen},
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 });
-
-export default App;
-
-
