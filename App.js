@@ -6,7 +6,7 @@ import { StyleSheet, Text, View, Image, ScrollView, Button, TouchableOpacity, We
 import BrowserScreen from './Pages/BrowserScreen';
 
 // import HomeScreen from './Pages/HomeScreen';
-// import WebScreen from './Pages/WebScreen';
+import WebScreen from './Pages/WebScreen';
 import SettingScreen from './Pages/SettingScreen';
 import PasswordScreen from './Pages/PasswordScreen';
 import FeedbackScreen from './Pages/FeedbackScreen';
@@ -20,8 +20,8 @@ const App = StackNavigator({
   
   // Login: { screen: LoginScreen },
   // Home: { screen: HomeScreen },
-  Browser:{screen: BrowserScreen},
-  // Web:{screen: WebScreen},
+  // Browser:{screen: BrowserScreen},
+  Web:{screen: WebScreen},
   Setting:{screen: SettingScreen},
   // 设置内页
   Password:{screen:PasswordScreen},

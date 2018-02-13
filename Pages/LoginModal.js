@@ -34,7 +34,8 @@ export default class LoginModal extends Component {
         // this.props.navigation.navigate('Browser', { entName:  data.entName })
         
         this.setState({
-          loginName: data.loginName
+          loginName: data.loginName,
+          password: data.password
         });
       }
       
