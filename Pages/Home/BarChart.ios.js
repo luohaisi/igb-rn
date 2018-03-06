@@ -9,7 +9,7 @@ import { SegmentedControl, List, Flex, ActivityIndicator } from 'antd-mobile';
 import {HomeBarChart} from '../../Conf/HtmlChart'
 
 
-export default class LineChart extends React.Component {
+export default class BarChart extends React.Component {
 
   constructor(props){
     super(props)

@@ -9,6 +9,9 @@ import { SegmentedControl, List, Flex } from 'antd-mobile';
 import BarChart from './BarChart'
 
 export default class BarChartSection extends React.Component {
+  constructor(props){
+    super(props)
+  }
     render() {
       return (
         <List>
@@ -17,10 +20,10 @@ export default class BarChartSection extends React.Component {
         </List.Item>
 
         <List.Item wrap>
-            <BarChart
-              dataSource={this.props.dataChart}
-              cateId={this.props.cateId}
-            />
+          <BarChart
+            dataSource={this.props.dataChart}
+            cateId={this.props.cateId}
+          />
         </List.Item>
       </List>
       );

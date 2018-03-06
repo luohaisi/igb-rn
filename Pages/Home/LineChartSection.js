@@ -54,6 +54,13 @@ export default class LineChartSection extends React.Component {
 }
   
   render() {
+    // table数据预处理，去除空数组,提升渲染效率
+    const dataTable = []
+    this.props.dataTable.map((item, key)=>{
+      if(item.groupPrice || item.entPrice || item.entPriceWithAllStr){
+        dataTable.push(item) 
+      }
+    })
       
     return (
       <List>
@@ -94,7 +101,7 @@ export default class LineChartSection extends React.Component {
         {this.state.selectedIndex === 1 &&
           <MyTable
               height={190}
-              dataSource={this.props.dataTable}
+              dataSource={dataTable}
               columns={this.columns}
           />
         }

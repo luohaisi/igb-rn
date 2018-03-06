@@ -18,7 +18,7 @@ export default class DeteFilterSection extends React.Component {
   constructor(props){
     super(props)
     
-    this.defaultCity = '选择城市'
+    this.defaultCity = '全国'
     this.state = {
       city: this.defaultCity,
       shortCutName:this.props.params.dateFrom + ' 至 ' + this.props.params.dateTo,

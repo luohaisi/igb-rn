@@ -4,7 +4,7 @@
  */
 import React from 'react';
 import { View, Text, Alert, WebView } from 'react-native';
-import { Button, List, Flex, ActivityIndicator } from 'antd-mobile';
+import { List, Flex, ActivityIndicator } from 'antd-mobile';
 
 var WEBVIEW_LINECHART = 'webview';
 
@@ -15,11 +15,14 @@ export default class LineChart extends React.Component {
   }
   
   render() {
+
+    const dataStr = JSON.stringify(this.props.dataSource)
       
     return (
       <View>
         <WebView
-          source={{uri: 'http://igb.oss-cn-shanghai.aliyuncs.com/LineChart.html'}}
+          // source={{uri: 'http://igb.oss-cn-shanghai.aliyuncs.com/LineChart.html'}}
+          source={{uri: 'http://199.10.10.101:8080', method:'POST', body:dataStr}}
           style={{height:220}}
           ref={WEBVIEW_LINECHART}
           // startInLoadingState
