@@ -126,8 +126,8 @@ export default class HomeScreen extends React.Component {
   // 日期范围选择结束时
   onDateRangePickerConfirm = (value) => {
     // console.log('onDateRangePickerConfirm:value', value)
-    this.dateFrom = value.dateFrom
-    this.dateTo   = value.dateTo
+    value.dateFrom ? this.dateFrom = value.dateFrom : null
+    value.dateTo   ? this.dateTo   = value.dateTo : null
     this.getRemoteData()
 
   }

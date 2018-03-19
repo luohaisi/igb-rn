@@ -22,8 +22,8 @@ export default class LineChart extends React.Component {
       <View>
         <WebView
           // source={{uri: 'http://igb.oss-cn-shanghai.aliyuncs.com/LineChart.html'}}
-          source={{uri: 'http://199.10.10.101:8080', method:'POST', body:dataStr}}
-          style={{height:220}}
+          source={{uri: 'http://106.15.88.4', method:'POST', body:dataStr}}
+          style={{height:190}}
           ref={WEBVIEW_LINECHART}
           // startInLoadingState
           // javaScriptEnabled={true}

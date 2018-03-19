@@ -3,7 +3,7 @@
  * @author luohaisi
  */
 import React from 'react'
-import { View, Text, StyleSheet, ScrollView, FlatList } from 'react-native';
+import { View, Text, StyleSheet, FlatList } from 'react-native';
 import { Card, Flex, WhiteSpace, WingBlank, Modal, ActivityIndicator } from 'antd-mobile'
 // Services
 import {getRemoteData} from '../../Services/CommonService.js'

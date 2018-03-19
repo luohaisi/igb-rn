@@ -27,7 +27,7 @@ export default class BarChart extends React.Component {
       <View>
         <WebView
           // source={{uri: 'http://igb.oss-cn-shanghai.aliyuncs.com/LineChart.html'}}
-          source={{uri: 'http://199.10.10.101:8080/bar?'+randNum, method:'POST', body:JSON.stringify(params)}}
+          source={{uri: 'http://106.15.88.4/index.php/bar?'+randNum, method:'POST', body:JSON.stringify(params)}}
           style={{height:data.length * 70,paddingBottom:0}}
           renderLoading={()=>{return (<ActivityIndicator toast text="正在加载" />)}}
         />

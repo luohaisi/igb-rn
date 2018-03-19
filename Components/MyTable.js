@@ -3,7 +3,7 @@
  * @author luohaisi
  */
 import React from 'react';
-import { View, Text, ScrollView } from 'react-native';
+import { View, Text, ScrollView, FlatList } from 'react-native';
 import { Card, Flex, List } from 'antd-mobile';
 
 export default class MyTable extends React.Component {
@@ -17,9 +17,41 @@ export default class MyTable extends React.Component {
     this.tableBordered= props.tableBorderFree ? null :'ant-table-bordered'
     this.blueHead  = props.isBlueHead ? styles.blueHead : styles.darkHead
   }
+
+  _renderItem = ({item}) => (
+    <List.Item style={{marginLeft:0,paddingLeft:0}}>
+      <Flex style={{alignItems:'flex-start'}}>
+        {this.columns.map((item2, key2) => {
+          return (
+            <Flex.Item key={key2}>
+              <Text>
+              {item2.formatter 
+              ? 
+                  item2.formatter(item[item2.key])
+              :
+                  item[item2.key]
+              }
+              </Text>
+            </Flex.Item>
+          )
+        })}
+      </Flex>
+    </List.Item>
+)
+
+renderHeader = () => {
+    return(
+        <Flex >
+            <Flex.Item style={{alignItems:'center', height:30,marginTop:20}}>
+              <Text style={{fontSize:15,textAlign:'center'}}>{this.header}</Text>
+            </Flex.Item>
+        </Flex>
+    )
+}
+
   render() {
     return (
-      <ScrollView style={this.height}>
+      <View style={this.height}>
       <Card full style={{borderWidth:0}}>
         <Card.Header
             title={<Text style={{fontSize:15,textAlign:'center'}}>{this.header}</Text>}
@@ -37,7 +69,8 @@ export default class MyTable extends React.Component {
               })}
             </Flex>
           </List.Item>
-          {this.props.dataSource.map((item, key) => {
+
+          {/* {this.props.dataSource.map((item, key) => {
             // console.log('table.item', item)
             return (
               <List.Item key={key}  style={{marginLeft:0,paddingLeft:0}}>
@@ -59,10 +92,20 @@ export default class MyTable extends React.Component {
                 </Flex>
               </List.Item>
             )
-            })}
+            })} */}
+
+            <FlatList
+                data={this.props.dataSource}
+                renderItem={this._renderItem}
+                keyExtractor={(item, index) => index}
+                // ListHeaderComponent={this.renderHeader}
+            />
+
         </Card.Body>
       </Card>
-      </ScrollView>
+
+      
+      </View>
     );
   }
 }

@@ -25,6 +25,16 @@ const mail = require('../Images/Icons2/mail.png')
 const more = require('../Images/Icons2/more.png')
 const mark = require('../Images/Icons2/mark.png')
 
+// item type
+const compare = require('../Images/itemType/compare.png')
+const invite = require('../Images/itemType/invite.png')
+const agreement = require('../Images/itemType/agreement.png')
+
+// item detail page
+const piTitle = require('../Images/Icons2/pi_title.png') 
+const piEnt = require('../Images/Icons2/pi_ent.png') 
+const listIcon = require('../Images/Icons2/list_icon.png') 
+
 export default class Ionicons extends React.Component {
     
     render(){
@@ -60,6 +70,20 @@ export default class Ionicons extends React.Component {
                     return sort
                 case 'logo-buffer':
                     return list
+                // item type
+                case 'project-compare':
+                    return compare
+                case 'project-invite':
+                    return invite
+                case 'project-agreement':
+                    return agreement
+                // item datail page
+                case 'item-detail-title':
+                    return piTitle
+                case 'item-detail-ent':
+                    return piEnt
+                case 'item-detail-list-icon':
+                    return listIcon
                 default:
                     return more
             }
