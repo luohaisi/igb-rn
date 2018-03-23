@@ -45,6 +45,14 @@ export default class HomeScreen extends React.Component {
     };
   }
 
+  static navigationOptions = ({ navigation }) => {
+    const { params } = navigation.state;
+    
+    return {
+      headerTitle: params ? params.title : '这是首页',
+    }
+  }
+
   componentWillMount() {
 
     TheBrowser = this
@@ -57,6 +65,7 @@ export default class HomeScreen extends React.Component {
     // 从接口请求默认数据
     ls.get('userInfo').then((data) => {
       if(data && data.token){
+        this.props.navigation.setParams({ title: data.entName })
         this.token = data.token
         this.entShortName = data.entShortName
         this.entId = data.entId

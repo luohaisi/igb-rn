@@ -16,18 +16,6 @@ const RadioItem = Radio.RadioItem;
 
 var ls = require('react-native-local-storage');
 
-const typeList =[
-  {value: 0, label: '全部'},
-  {value: 2, label: '比价'},
-  {value: 4, label: '招标'},
-  {value: 5, label: '协议'},
-];
-const statusList =[
-  {label: '全部', value: '全部'},
-  {label: '进行中', value: '进行中'},
-  {label: '已结束', value: '已结束'},
-];
-
 export default class FiltersSection extends React.Component {
 
     constructor(props){
@@ -42,8 +30,6 @@ export default class FiltersSection extends React.Component {
           locations:[],
           cateId:null,
           cateName:'材料',
-          piStatus:'进行中',
-          piType:2,
           piTypeName:'比价',
           ent:null,
           entName:'公司',
@@ -51,20 +37,12 @@ export default class FiltersSection extends React.Component {
           locstionName:'全国',
           pbBeginDate:'',
           pbEndDate:'',
-          searchKey:'',
           selectedIndex:-1,
           cataValue:null,
           entValue:null,
           dateFrom : current,
           dateTo : new Date()
         }
-
-        // ls.get('userInfo').then((data) => {
-        //   console.log('cons:statCategories')
-        //   this.setState({
-        //     statCategories:data.statCategories
-        //   })
-        // });
 
     }
 
@@ -79,23 +57,6 @@ export default class FiltersSection extends React.Component {
         })
         // console.log('getFilterEnts',this.state.subEnts)
       });
-    }
-
-    _onSearchBarChange= (searchKey) => {
-      this.setState({ searchKey });
-    };
-
-    _onSearchBarSubmit = (value) => {
-  
-        this._onFilterConConfirm()
-    }
-
-    onSelect = (opt) => {
-        console.log(opt.props.value);
-        this.setState({
-          visible: false,
-          selected: opt.props.value,
-        });
     }
 
     onSegmentChange = (e) => {
@@ -114,20 +75,6 @@ export default class FiltersSection extends React.Component {
         cataValue,
         cateId:cataValue[1],
         cateName:cataValue[0].split('-')[1] + '-' + cataValue[1].split('-')[1]
-      });
-    }
-    onStatePickerChange = (value) => {
-      console.log(value);
-      this.setState({
-        piStatus:value
-      });
-    }
-
-    onTypePickerChange = (obj) => {
-      console.log(obj);
-      this.setState({
-        piType:obj.value,
-        piTypeName:obj.label
       });
     }
 
@@ -157,10 +104,6 @@ export default class FiltersSection extends React.Component {
       })
     }
 
-    onScrollChange = (value) => {
-      console.log('onScrollChange', value);
-    }
-
     _onPressButton = () => {
       this.setState({
         selectedIndex:-1
@@ -171,13 +114,10 @@ export default class FiltersSection extends React.Component {
 
       let filterCondition = {
         cateId:this.state.cateId,
-        piStatus:this.state.piStatus,
-        piType:this.state.piType,
         ent:this.state.ent,
         location:this.state.location,
         pbBeginDate:dateFormat(this.state.dateFrom),
         pbEndDate:dateFormat(this.state.dateTo),
-        searchKey:this.state.searchKey,
         pageSize:100,
         pageNumber:1,
       }
@@ -186,28 +126,18 @@ export default class FiltersSection extends React.Component {
     }
     
     render(){
-      if(this.state.statCategories.length == 0 || this.state.subEnts.length == 0 || this.state.locations.length == 0){
+      if(this.state.subEnts.length == 0 || this.state.locations.length == 0){
         // console.log('render:1',this.state.statCategories.length>0 ? true : false)
         return <Text>no data</Text>
       }
       // console.log('render:2',this.state.statCategories.length>0 ? true : false)
       // console.log('render:2',this.state.subEnts)
         return(
-          <View>
-            <SearchBar 
-              placeholder="搜索"
-              cancelText="搜索"
-              value={this.state.searchKey}
-              onCancel={this._onSearchBarSubmit}
-              onSubmit={this._onSearchBarSubmit}
-              onChange={this._onSearchBarChange}
-              maxLength={16} 
-            />
+          <View style={{backgroundColor:'#fff'}}>
+            <WhiteSpace />
             <SegmentedControl
                 values={[
-                          this.state.cateName, 
-                          this.state.piStatus, 
-                          this.state.piTypeName,
+                          this.state.cateName,
                           this.state.entName,
                           '时间', 
                           this.state.locstionName
@@ -218,13 +148,28 @@ export default class FiltersSection extends React.Component {
                 // tintColor={'#8ac0eb'}
                 style={{backgroundColor:'#FFFFFF'}}
             />
+
+            <Flex style={{margin:5}}>
+              <Flex.Item></Flex.Item>
+              <Flex.Item></Flex.Item>
+              <Flex.Item>
+                <Button  onClick={this._entCompare} size="small" style={styles.botton}>
+                  <Text style={{color:'orange'}}>企业对比</Text>
+                </Button>
+              </Flex.Item>
+              <Flex.Item>
+                <Button  onClick={this._onFilterConConfirm} size="small" style={styles.botton}>
+                  <Text style={{color:'orange'}}>上海砼</Text>
+                </Button>
+              </Flex.Item>
+            </Flex>
+
             {this.state.selectedIndex > -1 && 
               <View onPress={()=>{console.log('_onPressButton')}} style={styles.TouchableOpacity}>
                 
                 {this.state.selectedIndex == 0 &&
                   <PickerView
                     onChange={this.onCatePickerChange}
-                    onScrollChange={this.onScrollChange}
                     value={this.state.cataValue}
                     data={this.state.statCategories}
                     cascade={true}
@@ -233,35 +178,6 @@ export default class FiltersSection extends React.Component {
                 }
 
                 {this.state.selectedIndex == 1 &&
-                  <View style={{height:216}}>
-                    {statusList.map(i => (
-                        <RadioItem 
-                          key={i.value} 
-                          checked={this.state.piStatus === i.value} 
-                          onChange={() => this.onStatePickerChange(i.value)}
-                        >
-                          {i.label}
-                        </RadioItem>
-                    ))}
-                  </View>
-                }
-
-                {this.state.selectedIndex == 2 &&
-
-                  <View style={{height:216}}>
-                    {typeList.map(obj => (
-                        <RadioItem 
-                          key={obj.value} 
-                          checked={this.state.piType === obj.value} 
-                          onChange={() => this.onTypePickerChange(obj)}
-                        >
-                          {obj.label}
-                        </RadioItem>
-                    ))}
-                  </View>
-                }
-
-                {this.state.selectedIndex == 3 &&
                   <PickerView
                     onChange={this.onEntPickerChange}
                     value={this.state.entValue}
@@ -270,7 +186,7 @@ export default class FiltersSection extends React.Component {
                   />
                 }
 
-                {this.state.selectedIndex == 4 &&
+                {this.state.selectedIndex == 2 &&
                   <WingBlank>
                       <List style={{height:201,paddingTop:20}}>
                           <DatePicker
@@ -296,7 +212,7 @@ export default class FiltersSection extends React.Component {
                   </WingBlank>
                 }
 
-                {this.state.selectedIndex == 5 &&
+                {this.state.selectedIndex == 3 &&
                   <PickerView
                     onChange={this.onLocationPickerChange}
                     value={this.state.locationValue}
@@ -337,5 +253,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#000',
     opacity: 0.1,
     zIndex: 79
+  },
+  botton:{ 
+    borderColor:'orange', 
+    marginRight: 4, 
+    marginLeft: 4 
   }
 })

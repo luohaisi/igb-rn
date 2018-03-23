@@ -45,11 +45,29 @@ export default class ProjectsScreen extends React.Component {
       remoteData:[],
       piStatus:'进行中',
       piType:2,
-      searchKey:''
+      searchKey:'',
+      renderView:false
     }
+    this.willFocusSubscription
   }
 
-  componentWillMount(){
+  // 
+  willFocusSubscription = this.props.navigation.addListener(
+    'willFocus',
+    payload => {
+      
+      if(payload.action.type == 'Navigation/NAVIGATE'){
+        this._init()
+        this.setState({
+          renderView:true
+        })
+        // console.debug('willFocus', payload);
+      }
+    }
+  )
+
+  _init(){
+
     // 从接口请求默认数据
     ls.get('userInfo').then((data) => {
       if(data && data.token){
@@ -142,9 +160,17 @@ export default class ProjectsScreen extends React.Component {
       </Item>
   )
 
+  _onEndReached = (info) => {
+    this.setState({
+      pageNumber:2
+    })
+  }
+
   render() {
-    return (
-      <WingBlank size="sm">
+
+    if(this.state.renderView === true){
+      return (
+      <WingBlank size="sm" style={{marginBottom:80}}>
         
         <FiltersSection onUpdateFilter={this._onUpdateFilter} />
         <WhiteSpace />
@@ -153,9 +179,15 @@ export default class ProjectsScreen extends React.Component {
           renderItem={this._renderItem}
           keyExtractor={(item, index) => index}
           refreshing={true}
-          scrollToEnd={()=>console.log('我是有底线的')}
+          onEndReached={this._onEndReached}
+          // extraData={}
+          refreshing={true}
         />
       </WingBlank>
-    );
+      )
+    }else{
+      return <Text>loading...</Text>
+    }
+    
   }
 }

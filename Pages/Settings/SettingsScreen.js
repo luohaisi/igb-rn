@@ -51,6 +51,7 @@ export default class SettingsScreen extends React.Component {
                   showLoginModal:true
                 })
                 this.props.navigation.goBack()
+                this.props.navigation.navigate('Home')
               });
             })
         }else{
