@@ -60,15 +60,21 @@ export default class LoginModal extends Component {
         flexDirection: 'column',
         justifyContent: 'flex-start',
         alignItems: 'center',
-        backgroundColor:'rgb(19,125,188)'
+        // backgroundColor:'rgb(19,125,188)'
+        backgroundColor:'#FFF'
       }}>
+      <WhiteSpace/>
+      <WhiteSpace/>
+      <WhiteSpace/>
+      <WhiteSpace/>
+      <WhiteSpace/>
         <View style={{margin:10,marginTop:30}} >
-          <Image style={{width:120,height:75}} source={require('../../Images/logo.png')} />
+          <Image style={{width:120,height:75}} source={require('../../Images/logo_light.png')} />
         </View>
         <View style={{alignItems:'center'}} >
-          <Text style={{color:'#F2F2F2',fontSize:20}}>绿智汇阳光采购云平台</Text>
+          <Text style={{color:'#A1A1A1',fontSize:20}}>绿智汇阳光采购云平台</Text>
           <WhiteSpace/>
-          <Text style={{color:'#ccc',fontSize:16}}>Welcome To Our App</Text>
+          {/* <Text style={{color:'#ccc',fontSize:16}}>Welcome To Our App</Text> */}
         </View>
         <View style={{width: '80%', marginTop:10}}>          
 
@@ -96,7 +102,7 @@ export default class LoginModal extends Component {
                   inline 
                   onClick={()=>this.submit(this.state.loginName, this.state.password)} 
                   style={styles.submitButton} 
-                  color="#f2f2f2">登入
+                  color="rgb(45,155,212)">登入
           </Button>
 
           <WhiteSpace/>
@@ -116,18 +122,19 @@ export default class LoginModal extends Component {
 const styles = StyleSheet.create({
   textInput:{
     height: 50, 
-    backgroundColor: 'rgb(45,155,212)',
+    // backgroundColor: 'rgb(45,155,212)',
     paddingLeft: 20,
-    color:'#F2F2F2',
-    fontSize:16
-    // borderColor: 'gray', 
-    // borderWidth: 1
+    color:'#A1A1A1',
+    fontSize:16,
+    borderColor: '#A1A1A1', 
+    borderWidth: 1,
+    borderRadius:3
   },
   submitButton:{
     height: 50, 
-    backgroundColor: 'rgb(19,125,188)',
+    // backgroundColor: 'rgb(45,155,212)',
     borderColor:'rgb(131,194,148)',
-    borderRadius:50,
+    borderRadius:5,
   },
   signInHome:{
     width: 200, 
