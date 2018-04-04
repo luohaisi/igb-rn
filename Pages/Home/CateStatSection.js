@@ -27,27 +27,27 @@ export default class CateStatSection extends React.Component {
             </Tabs>
           </Flex>
 
-        <Flex>
-          <Flex.Item>
-            <Text style={styles.flexItem}>集团均价:</Text>
-            <Text style={styles.flexItem}>{data.groupAvgPriceStr}</Text>
-          </Flex.Item>
-
-          {this.props.entId  != 6 ?
+          <Flex style={{paddingLeft:5,paddingRight:5}}>
             <Flex.Item>
-              <Text style={styles.flexItem}>{this.props.entShortName}均价:</Text>
-              <Text style={styles.flexItem}>{data.entAvgPriceStr}</Text>
+              <Text style={styles.flexItem}>集团均价:</Text>
+              <Text style={styles.flexItem}>{data.groupAvgPriceStr}</Text>
             </Flex.Item>
-            :
-            null
-          }
 
-          <Flex.Item>
-            <Text style={styles.flexItem}>市场均价:</Text>
-            <Text style={styles.flexItem}>{data.marketAvgPriceStr}</Text>
-          </Flex.Item>
-        </Flex>
-      </View>
+            {this.props.entId  != 6 ?
+              <Flex.Item>
+                <Text style={styles.flexItem}>{this.props.entShortName}均价:</Text>
+                <Text style={styles.flexItem}>{data.entAvgPriceStr}</Text>
+              </Flex.Item>
+              :
+              null
+            }
+
+            <Flex.Item>
+              <Text style={styles.flexItem}>市场均价:</Text>
+              <Text style={styles.flexItem}>{data.marketAvgPriceStr}</Text>
+            </Flex.Item>
+          </Flex>
+        </View>
       );
     }
   }
@@ -55,10 +55,10 @@ export default class CateStatSection extends React.Component {
   const styles = StyleSheet.create({
     container:{
       backgroundColor:'#ffffff',
-      paddingLeft:10,
-      paddingRight:10,
-      borderTopLeftRadius:10,
-      borderTopRightRadius:10
+      paddingTop:5,
+      // paddingRight:10,
+      borderTopLeftRadius:5,
+      borderTopRightRadius:5
     },
     flexItem:{
       height:25,

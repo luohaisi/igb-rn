@@ -4,7 +4,7 @@
  */
 import React from 'react';
 import { View, Text, Image, StyleSheet, ScrollView } from 'react-native';
-import { Accordion, List, Drawer, Button, Flex, WingBlank, WhiteSpace, Card } from 'antd-mobile';
+import { Accordion, List, Drawer, Button, Flex, WingBlank, WhiteSpace, Card, Toast } from 'antd-mobile';
 import Ionicons from '../../Components/Ionicons';
 
 const myImg = src => {
@@ -53,7 +53,7 @@ export default class ProjectDetailScreen extends React.Component {
     });
   }
 
-      // 获取/更新远程服务器数据
+  // 获取/更新远程服务器数据
   getRemoteData = () => {
     
     let token = this.token

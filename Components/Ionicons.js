@@ -35,6 +35,19 @@ const piTitle = require('../Images/Icons2/pi_title.png')
 const piEnt = require('../Images/Icons2/pi_ent.png') 
 const listIcon = require('../Images/Icons2/list_icon.png') 
 
+// discovery page logo
+const roadBridge = require('../Images/logo/road-bridge.png') 
+const underEngineer = require('../Images/logo/under-engineer.png') 
+const spongeCity = require('../Images/logo/sponge-city.png') 
+const healthBuilding = require('../Images/logo/health-building.png') 
+const greenBuilding = require('../Images/logo/green-building.png') 
+const greenProduce = require('../Images/logo/green-produce.png') 
+const cleanEnergy = require('../Images/logo/clean-energy.png') 
+
+const locationIcon = require('../Images/material/location.png') 
+const materialIcon = require('../Images/material/material.png') 
+const TimeIcon = require('../Images/material/time.png') 
+
 export default class Ionicons extends React.Component {
     
     render(){
@@ -84,6 +97,39 @@ export default class Ionicons extends React.Component {
                     return piEnt
                 case 'item-detail-list-icon':
                     return listIcon
+
+                // discovery page logo
+                // 道路桥梁
+                case 'road-bridge':
+                    return roadBridge
+                // 地下工程
+                case 'under-engineer':
+                    return underEngineer
+                // 海绵城市
+                case 'sponge-city':
+                    return spongeCity
+                // 健康建筑
+                case 'health-building':
+                    return healthBuilding
+                // 绿色建筑
+                case 'green-building':
+                    return greenBuilding
+                // 绿色生产
+                case 'green-produce':
+                    return greenProduce
+                // 清洁能源
+                case 'clean-energy':
+                    return cleanEnergy
+                // 位置图标
+                case 'location-icon' :
+                    return locationIcon
+                // 材料图标
+                case 'material-icon' :
+                    return materialIcon
+                // 时间图标
+                case 'time-icon' :
+                    return TimeIcon
+
                 default:
                     return more
             }

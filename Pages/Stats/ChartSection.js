@@ -31,7 +31,7 @@ export default class ChartSection extends React.Component {
         { title: '表格',}
       ];
     return (
-        <View>
+        <View style={styles.container}>
             <Flex>
             <Tabs 
                 initialPage={0}
@@ -60,10 +60,9 @@ export default class ChartSection extends React.Component {
 const styles = StyleSheet.create({
     container:{
       backgroundColor:'#ffffff',
-      paddingLeft:10,
-      paddingRight:10,
-      borderTopLeftRadius:10,
-      borderTopRightRadius:10
+      paddingTop:5,
+      borderTopLeftRadius:5,
+      borderTopRightRadius:5
     }
       
   })

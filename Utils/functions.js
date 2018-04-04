@@ -291,6 +291,29 @@ const getFilterLocations = (locations) => {
     return result
 }
 
+const getIconName = (typeName) => {
+
+    switch(typeName){
+      case '道路桥梁':
+        return 'road-bridge'
+      case '地下工程':
+        return 'under-engineer'
+      case '海绵城市':
+        return 'sponge-city'
+      case '健康建筑':
+        return 'health-building'
+      case '绿色建筑':
+        return 'green-building'
+      case '绿色生产':
+        return 'green-produce'
+      case '清洁能源':
+        return 'clean-energy'
+      default:
+        return 'clean-energy'
+    }
+
+  }
+
  export {
     getCateName,
     cateNameObj,
@@ -302,5 +325,6 @@ const getFilterLocations = (locations) => {
     dateFormat,
     getFilterCategories,
     getFilterEnts,
-    getFilterLocations
+    getFilterLocations,
+    getIconName
  }

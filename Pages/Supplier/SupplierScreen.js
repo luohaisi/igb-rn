@@ -4,7 +4,7 @@
  */
 import React from 'react';
 import { View, Text, FlatList, StyleSheet } from 'react-native';
-import { Flex, WingBlank, List, WhiteSpace, Button, Toast, Accordion} from 'antd-mobile'
+import { Flex, WingBlank, List, WhiteSpace, Button, Toast, Accordion, ActivityIndicator} from 'antd-mobile'
 import FiltersSection from './FiltersSection'
 import Ionicons from '../../Components/Ionicons';
 
@@ -22,7 +22,7 @@ export default class SupplierScreen extends React.Component {
     super(props);
     // 基本属性
     this.filterCondition = {
-      pageSize:100,
+      pageSize:30,
       pageNumber:1
     }
 
@@ -226,7 +226,7 @@ export default class SupplierScreen extends React.Component {
       </WingBlank>
       );
     }else{
-      return <Text>loading...</Text>
+      return <ActivityIndicator toast text="正在加载" />
     }
   }
   

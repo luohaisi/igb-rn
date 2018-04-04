@@ -4,7 +4,7 @@
  */
 import React from 'react';
 import { View, Text, FlatList } from 'react-native';
-import { Flex, WingBlank, List, WhiteSpace, Button, Toast} from 'antd-mobile'
+import { Flex, WingBlank, List, WhiteSpace, Button, Toast, ActivityIndicator} from 'antd-mobile'
 import FiltersSection from './FiltersSection'
 import Ionicons from '../../Components/Ionicons';
 
@@ -35,7 +35,7 @@ export default class ProjectsScreen extends React.Component {
       piType:2,
       pbBeginDate:'2017-1',
       pbEndDate:'2018-3',
-      pageSize:100,
+      pageSize:30,
       pageNumber:1
     }
 
@@ -170,7 +170,7 @@ export default class ProjectsScreen extends React.Component {
 
     if(this.state.renderView === true){
       return (
-      <WingBlank size="sm" style={{marginBottom:80}}>
+      <WingBlank size="sm" style={{marginBottom:136}}>
         
         <FiltersSection onUpdateFilter={this._onUpdateFilter} />
         <WhiteSpace />
@@ -186,7 +186,7 @@ export default class ProjectsScreen extends React.Component {
       </WingBlank>
       )
     }else{
-      return <Text>loading...</Text>
+      return <ActivityIndicator toast text="正在加载" />
     }
     
   }

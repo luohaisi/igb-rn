@@ -4,7 +4,7 @@
  */
 import React from 'react';
 import { View, Text, ScrollView } from 'react-native';
-import { Flex, WingBlank, List, WhiteSpace, Button, Toast} from 'antd-mobile'
+import { Flex, WingBlank, List, WhiteSpace, Button, Toast, ActivityIndicator} from 'antd-mobile'
 import FiltersSection from './FiltersSection'
 import OverviewSection from './OverviewSection'
 import ChartSection from './ChartSection'
@@ -50,6 +50,7 @@ export default class StatsScreen extends React.Component {
     ls.get('userInfo').then((data) => {
       if(data && data.token){
         this.token = data.token
+        this.entId = data.entId
         // 获取远程数据
         this.getRemoteData()
   
@@ -101,15 +102,16 @@ export default class StatsScreen extends React.Component {
       return (
       <WingBlank size="sm" style={{marginBottom:80}}>
         
-        <FiltersSection onUpdateFilter={this._onUpdateFilter} />
+        <FiltersSection onUpdateFilter={this._onUpdateFilter} entId={this.entId} navigation={this.props.navigation} />
         <WhiteSpace />
 
         <ScrollView>
           <OverviewSection dataSource={this.state.remoteData.overview} />
           <WhiteSpace />
-  
-          <ChartSection dataSource={this.state.remoteData} />
-      
+
+          <WingBlank size="sm">
+            <ChartSection dataSource={this.state.remoteData} />
+          </WingBlank>
         </ScrollView>
 
 
@@ -117,7 +119,7 @@ export default class StatsScreen extends React.Component {
       </WingBlank>
       )
     }else{
-      return <Text>loading...</Text>
+      return <ActivityIndicator toast text="正在加载" />
     }
   }
 }

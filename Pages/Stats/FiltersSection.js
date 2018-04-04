@@ -3,8 +3,20 @@
  * @author luohaisi
  */
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { SegmentedControl, WhiteSpace, Flex, List, Button, WingBlank, Radio, PickerView, DatePicker, SearchBar } from 'antd-mobile';
+import { View, Text, StyleSheet, TouchableOpacity, TouchableHighlight, Modal, Alert } from 'react-native';
+import { 
+  SegmentedControl, 
+  WhiteSpace, 
+  Flex, 
+  List, 
+  Button, 
+  WingBlank, 
+  Radio, 
+  PickerView, 
+  DatePicker, 
+  SearchBar,
+  Checkbox
+} from 'antd-mobile';
 import { 
   getFilterCategories, 
   getFilterEnts, 
@@ -12,7 +24,8 @@ import {
   dateFormat, 
   // getDateInterval 
 } from '../../Utils/functions'
-const RadioItem = Radio.RadioItem;
+
+const CheckboxItem = Checkbox.CheckboxItem;
 
 var ls = require('react-native-local-storage');
 
@@ -41,7 +54,9 @@ export default class FiltersSection extends React.Component {
           cataValue:null,
           entValue:null,
           dateFrom : current,
-          dateTo : new Date()
+          dateTo : new Date(),
+          modalVisible: false,
+          pickedEnts:[]
         }
 
     }
@@ -53,6 +68,7 @@ export default class FiltersSection extends React.Component {
         this.setState({
           statCategories:getFilterCategories(data.statCategories),
           subEnts:getFilterEnts(data.subEnts),
+          comparedEnt:data.subEnts,
           locations:getFilterLocations(data.locations)
         })
         // console.log('getFilterEnts',this.state.subEnts)
@@ -125,6 +141,52 @@ export default class FiltersSection extends React.Component {
       this._onPressButton()
     }
     
+    setModalVisible(visible) {
+      this.setState({modalVisible: visible});
+    }
+
+    _onCheckboxChange = (key, selected) => {
+
+      let updateData = this.state.pickedEnts
+      const index = updateData.indexOf(key);
+      // console.log('selected', selected)
+      // console.log('key', key)
+      // console.log('index', index)
+      // console.log('selected == true && index == -1', selected == true && index == -1)
+      if(selected == true && index == -1){
+        if(updateData.length >= 4) {
+          Alert.alert(
+            '提示',
+            '最多仅能选择4家企业进行对比！'
+          )
+        }else{
+          updateData = [...updateData, key]
+          this.setState({pickedEnts: updateData})
+        }
+        
+      }else if(selected == false){
+        updateData.splice(index, 1);
+        this.setState({pickedEnts: updateData})
+      }
+
+      
+      // console.log('_onCheckboxChange', updateData)
+
+    }
+
+    _sentCompare = () => {
+      if(this.state.pickedEnts.length < 2){
+        Alert.alert(
+          '提示',
+          '请至少选择2家企业进行对比！'
+        )
+        return
+      }
+      // console.log('_sentCompare', this.state.pickedEnts)
+      this.setModalVisible(!this.state.modalVisible)
+      this.props.navigation.navigate('EntCompare', {pickedEnts:this.state.pickedEnts})
+    }
+
     render(){
       if(this.state.subEnts.length == 0 || this.state.locations.length == 0){
         // console.log('render:1',this.state.statCategories.length>0 ? true : false)
@@ -148,22 +210,55 @@ export default class FiltersSection extends React.Component {
                 // tintColor={'#8ac0eb'}
                 style={{backgroundColor:'#FFFFFF'}}
             />
-
+{this.props.entId == 6 && 
             <Flex style={{margin:5}}>
               <Flex.Item></Flex.Item>
               <Flex.Item></Flex.Item>
               <Flex.Item>
-                <Button  onClick={this._entCompare} size="small" style={styles.botton}>
+                <Button  onClick={() => this.setModalVisible(true)} size="small" style={styles.botton}>
                   <Text style={{color:'orange'}}>企业对比</Text>
                 </Button>
+                <Modal
+                  animationType="fade"
+                  transparent={true}
+                  visible={this.state.modalVisible}
+                  presentationStyle="overFullScreen"
+                  onRequestClose={() => {
+                    alert('Modal has been closed.');
+                  }}>
+                  <TouchableOpacity 
+                    onPress={() => this.setModalVisible(!this.state.modalVisible)} 
+                    style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor:'rgba(161,161,161,0.5)'}}
+                  >
+                    <WingBlank size="sm" style={{backgroundColor:'#FFFFFF',width:'90%',borderRadius:5}}>
+                    <List renderHeader="请选择需要对比的企业">
+                      {this.state.comparedEnt.map((i, index) => (
+                      
+                        <CheckboxItem 
+                          key={index} 
+                          onChange={(e) => this._onCheckboxChange(i.entId, e.target.checked)}
+                          checked={this.state.pickedEnts.indexOf(i.entId) == -1 ? false : true}
+                        >
+                          {i.shortName}
+                        </CheckboxItem>
+                      ))}
+                      <List.Item>
+                      
+                          <Button type="primary" onClick={this._sentCompare}>对比</Button>
+                      
+                      </List.Item>
+                    </List>
+                    </WingBlank>
+                  </TouchableOpacity>
+                </Modal>
               </Flex.Item>
               <Flex.Item>
-                <Button  onClick={this._onFilterConConfirm} size="small" style={styles.botton}>
+                <Button  onClick={()=>this.props.navigation.navigate('Tong')} size="small" style={styles.botton}>
                   <Text style={{color:'orange'}}>上海砼</Text>
                 </Button>
               </Flex.Item>
             </Flex>
-
+}
             {this.state.selectedIndex > -1 && 
               <View onPress={()=>{console.log('_onPressButton')}} style={styles.TouchableOpacity}>
                 

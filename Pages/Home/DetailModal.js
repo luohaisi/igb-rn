@@ -3,8 +3,8 @@
  * @author luohaisi
  */
 import React from 'react'
-import { View, Text, StyleSheet, FlatList } from 'react-native';
-import { Card, Flex, WhiteSpace, WingBlank, Modal, ActivityIndicator } from 'antd-mobile'
+import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import { Card, Flex, WhiteSpace, WingBlank, Modal, ActivityIndicator, Toast } from 'antd-mobile'
 // Services
 import {getRemoteData} from '../../Services/CommonService.js'
 
@@ -15,22 +15,37 @@ import {
 
  export default class DetailModal extends React.Component {
 
-    constructor(props){
-        super(props)
-        this.state = {
-            remoteData:[]
-        }
+  constructor(props){
+    super(props)
+    this.state = {
+        remoteData:[]
     }
+  }
+
+  static navigationOptions = ({ navigation }) => {
+
+    return {
+      title: '详情',
+      headerStyle: {
+        backgroundColor: '#117BE9',
+      },
+      headerTintColor: '#F2F2F2',
+    }
+  }
+
+    
 
 
     componentWillMount(){
 
-        getRemoteData(this.props.params).then(
+        // console.log('this.props.navigation', this.props.navigation.state.params)
+        getRemoteData(this.props.navigation.state.params).then(
             response => {
                 if(response.return_code == 0) {
                     response.result && this.setState({
                         remoteData: response.result
                     })
+                    // console.log('DetailModal', response.result)
                 } else {
                     // console.log('HomeModalPage:response', response)
                 }
@@ -44,16 +59,22 @@ import {
         return (number*100).toFixed(2) + '%';
     }
 
+    _goToProject = (piId) => {
+        Toast.loading('正在加载...')
+        this.props.navigation.navigate('ProjectDetail', {piId:piId})
+    }
+
     _renderItem = ({item}) => (
+      <TouchableOpacity onPress={()=>this.props.navigation.navigate('ProjectDetail', {piId:item.piId})}>
         <Card style={{marginBottom:20}}>
             <Card.Header
-                title={<Text style={{color:'#50a9e6',fontSize:15}}>{item.piTitle}</Text>}
+                title={<Text style={{color:'#50a9e6',fontSize:15}} onPress={()=>this._goToProject(item.piId)} >{item.piTitle}</Text>}
             />
             <Card.Body>
 
                 <Flex style={{marginLeft:10}}>
                     <Flex.Item>
-                        <Text style={style.fontsize12}>{this.props.params.filterCondition.mainCateId == 3 ? '市场均价': '企业均价'} ：{item.avgPriceStr}</Text>
+                        <Text style={style.fontsize12}>{this.props.navigation.state.params.filterCondition.mainCateId == 3 ? '市场均价': '企业均价'} ：{item.avgPriceStr}</Text>
                     </Flex.Item>
                     <Flex.Item>
                         <Text style={style.fontsize12}> 项目单价：{item.priceStr}</Text>
@@ -77,26 +98,40 @@ import {
                 content={'地区：' + item.areaStr}
                 extra={'结束时间：' + item.finishedDate} />
         </Card>
+       </TouchableOpacity>
     )
 
     renderHeader = () => {
-        return(
-            <Flex >
-                <Flex.Item style={{alignItems:'center', height:30,marginTop:20}}>
-                    <Text style={{color:'#f2f2f2',fontSize:18,fontWeight:'bold'}}>{this.props.cateId == 3 ? '上海地区':''}{cateNameObj[this.props.cateId]}价格对比详情</Text>
-                </Flex.Item>
-            </Flex>
-        )
+
+      const { state } = this.props.navigation;
+      const titlePre = state.params.filterCondition.mainCateId == 3 ? '上海地区':''
+
+      return(
+          <Flex >
+              <Flex.Item style={{alignItems:'center', height:30,marginTop:20}}>
+                  <Text style={{color:'#f2f2f2',fontSize:18,fontWeight:'bold'}}>
+                    {titlePre}{cateNameObj[state.params.filterCondition.mainCateId]}价格对比详情
+                  </Text>
+              </Flex.Item>
+          </Flex>
+      )
     }
 
     render(){
+        if(this.state.remoteData.length == 0){
+            return<ActivityIndicator toast text="正在加载" />
+        }
         return (
-            <FlatList
-                data={this.state.remoteData}
-                renderItem={this._renderItem}
-                keyExtractor={(item, index) => index}
-                ListHeaderComponent={this.renderHeader}
-            />
+            <View style={{backgroundColor:'#6ab7e6'}}>
+                <WingBlank size="sm">
+                    <FlatList
+                        data={this.state.remoteData}
+                        renderItem={this._renderItem}
+                        keyExtractor={(item, index) => index}
+                        ListHeaderComponent={this.renderHeader}
+                    />
+                </WingBlank>
+            </View>
         )
     }
  } 

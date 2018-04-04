@@ -66,10 +66,11 @@ export default class LineChartSection extends React.Component {
       <List>
         <List.Item 
           style={styles.listHeader}
-          onClick={() => this.setState({showDetailModal:true})}
+          // onClick={() => this.setState({showDetailModal:true})}
+          onClick={() => this.props.navigate('HomeDetail',this.props.params)}
           extra={<Ionicons name={'ios-list-outline'} size={25} color={'#58b6ef'} />}>
           <Text style={styles.listHeaderText}>价格对比走势图</Text>
-          <Modal
+          {/* <Modal
                 transparent
                 popup={true}
                 animationType="slide-up"
@@ -80,7 +81,7 @@ export default class LineChartSection extends React.Component {
              
                   <DetailModal params={this.props.params} cateId={this.props.cateId} />
              
-            </Modal>
+            </Modal> */}
         </List.Item>
         <List.Item>
           <SegmentedControl 

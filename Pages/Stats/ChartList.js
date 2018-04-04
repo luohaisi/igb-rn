@@ -25,7 +25,9 @@ export default class ChartList extends React.Component {
     const groupByTime = JSON.stringify(this.props.dataSource.groupByTime)
 
     const htmlGroupByEnt = StatsIntervalChart(groupByEnt)
+    const htmlGroupByEnt2 = StatsIntervalChart2(groupByEnt)
     const htmlGroupByCate = StatsIntervalChart3(groupByCate)
+    const htmlGroupByCate2 = StatsIntervalChart4(groupByCate)
     const htmlGroupByTime = StatsIntervalChart5(groupByTime)
 
     return(
@@ -43,7 +45,8 @@ export default class ChartList extends React.Component {
                 renderLoading={()=>{return (<ActivityIndicator toast text="正在加载" />)}}
               />
             </List.Item>
-
+{this.props.dataSource.groupByEnt[0].purchaseQuantity >= 0 && 
+            <View>
             <List.Item 
               style={styles.listHeader}
             >
@@ -51,12 +54,16 @@ export default class ChartList extends React.Component {
             </List.Item>
             <List.Item multipleLine>
               <WebView
-                source={{html: htmlGroupByEnt}}
+                source={{html: htmlGroupByEnt2}}
                 style={{height:190,paddingBottom:0}}
                 renderLoading={()=>{return (<ActivityIndicator toast text="正在加载" />)}}
               />
             </List.Item>
+            </View>
+}
 
+{this.props.dataSource.groupByCate.length > 0 && 
+  <View>
             <List.Item 
               style={styles.listHeader}
             >
@@ -69,7 +76,11 @@ export default class ChartList extends React.Component {
                 renderLoading={()=>{return (<ActivityIndicator toast text="正在加载" />)}}
               />
             </List.Item>
+ </View>
+}
 
+{this.props.dataSource.groupByCate.length > 0 && 
+  <View>
             <List.Item 
               style={styles.listHeader}
             >
@@ -77,12 +88,16 @@ export default class ChartList extends React.Component {
             </List.Item>
             <List.Item multipleLine>
               <WebView
-                source={{html: htmlGroupByCate}}
+                source={{html: htmlGroupByCate2}}
                 style={{height:190,paddingBottom:0}}
                 renderLoading={()=>{return (<ActivityIndicator toast text="正在加载" />)}}
               />
             </List.Item>
+  </View>
+}
 
+{this.props.dataSource.groupByTime.length > 0 && 
+  <View>
             <List.Item 
               style={styles.listHeader}
             >
@@ -95,7 +110,8 @@ export default class ChartList extends React.Component {
                 renderLoading={()=>{return (<ActivityIndicator toast text="正在加载" />)}}
               />
             </List.Item>
-
+  </View>
+}
         </List>
       
     )

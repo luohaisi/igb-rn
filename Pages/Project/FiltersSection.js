@@ -4,7 +4,19 @@
  */
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { SegmentedControl, WhiteSpace, Flex, List, Button, WingBlank, Radio, PickerView, DatePicker, SearchBar } from 'antd-mobile';
+import { 
+  SegmentedControl, 
+  WhiteSpace, 
+  Flex, 
+  List, 
+  Button, 
+  WingBlank, 
+  Radio, 
+  PickerView, 
+  DatePicker, 
+  SearchBar, 
+  Tag 
+} from 'antd-mobile';
 import { 
   getFilterCategories, 
   getFilterEnts, 
@@ -27,6 +39,9 @@ const statusList =[
   {label: '进行中', value: '进行中'},
   {label: '已结束', value: '已结束'},
 ];
+
+// const filterList  = [0,1,2,3,4,5,6]
+const filterList  = ['材料','进行中','比价','公司','时间','全国']
 
 export default class FiltersSection extends React.Component {
 
@@ -59,12 +74,14 @@ export default class FiltersSection extends React.Component {
           dateTo : new Date()
         }
 
-        // ls.get('userInfo').then((data) => {
-        //   console.log('cons:statCategories')
-        //   this.setState({
-        //     statCategories:data.statCategories
-        //   })
-        // });
+        this.showFilterList = this.props.showFilterList == undefined ? [0,1,2,3,4,5] : this.props.showFilterList
+
+        this.filterList = this.showFilterList.map((item) => {
+          return filterList[item]
+        })
+
+        // console.log('this.props.showSearchbar', this.props.showSearchbar)
+        // console.log('this.filterList', this.filterList)
 
     }
 
@@ -90,22 +107,22 @@ export default class FiltersSection extends React.Component {
         this._onFilterConConfirm()
     }
 
-    onSelect = (opt) => {
-        console.log(opt.props.value);
-        this.setState({
-          visible: false,
-          selected: opt.props.value,
-        });
-    }
+    // onSelect = (opt) => {
+    //     console.log(opt.props.value);
+    //     this.setState({
+    //       visible: false,
+    //       selected: opt.props.value,
+    //     });
+    // }
 
     onSegmentChange = (e) => {
       this.setState({
         selectedIndex:e.nativeEvent.selectedSegmentIndex
       })
-        console.log(`selectedIndex:${e.nativeEvent.selectedSegmentIndex}`);
+        // console.log(`selectedIndex:${e.nativeEvent.selectedSegmentIndex}`);
     }
     onValueChange = (value) => {
-        console.log('onValueChange', value);
+        // console.log('onValueChange', value);
     }
 
     onCatePickerChange = (cataValue) => {
@@ -117,14 +134,14 @@ export default class FiltersSection extends React.Component {
       });
     }
     onStatePickerChange = (value) => {
-      console.log(value);
+      // console.log(value);
       this.setState({
         piStatus:value
       });
     }
 
     onTypePickerChange = (obj) => {
-      console.log(obj);
+      // console.log(obj);
       this.setState({
         piType:obj.value,
         piTypeName:obj.label
@@ -132,7 +149,7 @@ export default class FiltersSection extends React.Component {
     }
 
     onEntPickerChange = (entValue) => {
-      console.log('entValue', entValue);
+      // console.log('entValue', entValue);
       this.state.subEnts.map((item)=>{
         if(item.value == entValue[0]){
           this.setState({
@@ -145,7 +162,7 @@ export default class FiltersSection extends React.Component {
     }
 
     onLocationPickerChange = (locationValue) => {
-      console.log('locationValue', locationValue);
+      // console.log('locationValue', locationValue);
       this.state.locations.map((item)=>{
         if(item.value == locationValue[0]){
           this.setState({
@@ -158,7 +175,7 @@ export default class FiltersSection extends React.Component {
     }
 
     onScrollChange = (value) => {
-      console.log('onScrollChange', value);
+      // console.log('onScrollChange', value);
     }
 
     _onPressButton = () => {
@@ -178,7 +195,7 @@ export default class FiltersSection extends React.Component {
         pbBeginDate:dateFormat(this.state.dateFrom),
         pbEndDate:dateFormat(this.state.dateTo),
         searchKey:this.state.searchKey,
-        pageSize:100,
+        pageSize:30,
         pageNumber:1,
       }
       this.props.onUpdateFilter(filterCondition)
@@ -194,34 +211,67 @@ export default class FiltersSection extends React.Component {
       // console.log('render:2',this.state.subEnts)
         return(
           <View>
-            <SearchBar 
-              placeholder="搜索"
-              cancelText="搜索"
-              value={this.state.searchKey}
-              onCancel={this._onSearchBarSubmit}
-              onSubmit={this._onSearchBarSubmit}
-              onChange={this._onSearchBarChange}
-              maxLength={16} 
-            />
+
+            {this.props.showSearchbar == true || this.props.showSearchbar == undefined &&
+              <SearchBar 
+                placeholder="搜索"
+                cancelText="搜索"
+                value={this.state.searchKey}
+                onCancel={this._onSearchBarSubmit}
+                onSubmit={this._onSearchBarSubmit}
+                onChange={this._onSearchBarChange}
+                maxLength={16} 
+              />
+            }
+
             <SegmentedControl
-                values={[
-                          this.state.cateName, 
-                          this.state.piStatus, 
-                          this.state.piTypeName,
-                          this.state.entName,
-                          '时间', 
-                          this.state.locstionName
-                        ]}
+                // values={[
+                //           this.state.cateName, 
+                //           this.state.piStatus, 
+                //           this.state.piTypeName,
+                //           this.state.entName,
+                //           '时间', 
+                //           this.state.locstionName
+                //         ]}
+                values={this.filterList}
                 onChange={this.onSegmentChange}
                 onValueChange={this.onValueChange}
                 selectedIndex={this.state.selectedIndex}
                 // tintColor={'#8ac0eb'}
                 style={{backgroundColor:'#FFFFFF'}}
             />
+            <WhiteSpace />
+
+            {/* 筛选内容标签start */}
+            <Flex wrap="wrap" style={{paddingLeft:20, backgroundColor:'#FFFFFF', borderRadius:5}}>
+              {this.state.cateName && this.state.cateName != '材料' && this.state.cateName != '材料-全部' &&
+                <Text style={styles.filterTag} onPress={() => console.log('1st')}>{this.state.cateName}</Text>
+              }
+              {this.state.piStatus && this.state.piStatus != '全部' && this.showFilterList.indexOf(1) > -1 &&
+                <Text style={styles.filterTag} onPress={() => console.log('1st')}>{this.state.piStatus}</Text>
+              }
+              {this.state.piTypeName && this.state.piTypeName != '全部' &&  this.showFilterList.indexOf(2) > -1 &&
+                <Text style={styles.filterTag} onPress={() => console.log('1st')}>{this.state.piTypeName}</Text>
+              }
+              {this.state.entName && this.state.entName != '公司' &&  this.showFilterList.indexOf(3) > -1 &&
+                <Text style={styles.filterTag} onPress={() => console.log('1st')}>{this.state.entName}</Text>
+              }
+
+                <Text style={styles.filterTag} onPress={() => console.log('1st')}>
+                  {dateFormat(this.state.dateFrom)} - {dateFormat(this.state.dateTo)}
+                </Text>
+              
+              {this.state.locstionName && this.state.locstionName != '全国' &&  this.showFilterList.indexOf(5) > -1 &&
+                <Text style={styles.filterTag} onPress={() => console.log('1st')}>{this.state.locstionName}</Text>
+              }
+            </Flex>
+            {/* 筛选内容标签end */}
+            <WhiteSpace />
+
             {this.state.selectedIndex > -1 && 
               <View onPress={()=>{console.log('_onPressButton')}} style={styles.TouchableOpacity}>
                 
-                {this.state.selectedIndex == 0 &&
+                {this.showFilterList[this.state.selectedIndex] == 0 &&
                   <PickerView
                     onChange={this.onCatePickerChange}
                     onScrollChange={this.onScrollChange}
@@ -232,7 +282,7 @@ export default class FiltersSection extends React.Component {
                   />
                 }
 
-                {this.state.selectedIndex == 1 &&
+                {this.showFilterList[this.state.selectedIndex] == 1 &&
                   <View style={{height:216}}>
                     {statusList.map(i => (
                         <RadioItem 
@@ -246,7 +296,7 @@ export default class FiltersSection extends React.Component {
                   </View>
                 }
 
-                {this.state.selectedIndex == 2 &&
+                {this.showFilterList[this.state.selectedIndex] == 2 &&
 
                   <View style={{height:216}}>
                     {typeList.map(obj => (
@@ -261,7 +311,7 @@ export default class FiltersSection extends React.Component {
                   </View>
                 }
 
-                {this.state.selectedIndex == 3 &&
+                {this.showFilterList[this.state.selectedIndex] == 3 &&
                   <PickerView
                     onChange={this.onEntPickerChange}
                     value={this.state.entValue}
@@ -270,7 +320,7 @@ export default class FiltersSection extends React.Component {
                   />
                 }
 
-                {this.state.selectedIndex == 4 &&
+                {this.showFilterList[this.state.selectedIndex] == 4 &&
                   <WingBlank>
                       <List style={{height:201,paddingTop:20}}>
                           <DatePicker
@@ -296,7 +346,7 @@ export default class FiltersSection extends React.Component {
                   </WingBlank>
                 }
 
-                {this.state.selectedIndex == 5 &&
+                {this.showFilterList[this.state.selectedIndex] == 5 &&
                   <PickerView
                     onChange={this.onLocationPickerChange}
                     value={this.state.locationValue}
@@ -337,5 +387,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#000',
     opacity: 0.1,
     zIndex: 79
+  },
+  filterTag:{
+    margin:5,
+    padding:3,
+    borderWidth:1, 
+    borderColor:'#eee', 
+    // color:'#f19736',
+    color:'#777',
+    backgroundColor:'#eee',
+    // borderRadius:5
   }
 })

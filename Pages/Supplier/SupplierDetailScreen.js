@@ -77,7 +77,7 @@ export default class SupplierDetailScreen extends React.Component {
   }
 
   onOpenChange = (...args) => {
-    console.log(args);
+    // console.log(args);
     // this.setState({ open: !this.state.open });
   }
 
@@ -94,7 +94,7 @@ export default class SupplierDetailScreen extends React.Component {
 
   render() {
 
-    console.log('remoteData', this.state.remoteData)
+    // console.log('remoteData', this.state.remoteData)
 
     const columns = [{
         title: '产品名称+规格',

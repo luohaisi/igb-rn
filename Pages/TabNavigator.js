@@ -66,11 +66,14 @@ export default TabNavigator({
         backgroundColor:'#117BE9'
       },
       headerRight: (
-          <Button
-            onPress={() => navigation.navigate('Setting')}
-            title="设置"
-            color="#fff"
-          />
+          <Text onPress={()=>navigation.navigate('Setting')} style={{
+            color:'#fff', 
+            height:50,
+            fontWeight:'bold',
+            padding:10,
+            paddingTop:15,
+            fontSize:15
+          }}>设置</Text>
         ),
     }),
     tabBarOptions: {

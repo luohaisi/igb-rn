@@ -24,12 +24,15 @@ export default class HomeScreen extends React.Component {
 
   constructor(props) {
     super(props);
+    // 设置默认开始时间
+    const current = new Date();
+    current.setDate(current.getDate() - 365)
     // 基本属性
     this.chooseCate = 3;
 
     this.dateInterval = 30
-    this.dateFrom = '2017-1-7'
-    this.dateTo = '2018-2-6'
+    this.dateFrom = dateFormat(current)
+    this.dateTo = dateFormat(new Date())
     
     this.locationId = null
 
@@ -182,7 +185,7 @@ export default class HomeScreen extends React.Component {
     // console.log('renderView')
     return (
       <ScrollView>
-      <WingBlank size="sm">
+      <WingBlank size="sm" style={{marginBottom:10}}>
         {/* 顶部筛选条件区块 */}
         <DateFilterSection
           params={{
@@ -224,6 +227,7 @@ export default class HomeScreen extends React.Component {
             dataTable={this.state.remoteData.mixedPriceByTimeRaw}
             showEntPrice={this.entId != 6}
             cateId={this.chooseCate}
+            navigate={this.props.navigation.navigate}
             params={{
               token:this.token,
               filterCondition: {

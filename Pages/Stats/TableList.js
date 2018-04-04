@@ -12,7 +12,7 @@ export default class TableList extends React.Component {
 
   constructor(props){
     super(props)
-    console.log('TableList', this.props.dataSource)
+    // console.log('TableList', this.props.dataSource)
   }
 
   /**
@@ -131,7 +131,9 @@ export default class TableList extends React.Component {
                 />
 
             </List.Item>
-      
+
+{this.props.dataSource.groupByEnt[0].purchaseQuantity >= 0 && 
+  <View>
             <List.Item 
               style={styles.listHeader}
             >
@@ -144,7 +146,11 @@ export default class TableList extends React.Component {
                 />
 
             </List.Item>
-       
+  </View>
+}
+
+{this.props.dataSource.groupByCate.length > 0 && 
+  <View>
             <List.Item 
               style={styles.listHeader}
             >
@@ -157,7 +163,11 @@ export default class TableList extends React.Component {
                 />
 
             </List.Item>
-       
+ </View>
+}
+
+{this.props.dataSource.groupByCate.length > 0 && 
+  <View>
             <List.Item 
               style={styles.listHeader}
             >
@@ -170,7 +180,11 @@ export default class TableList extends React.Component {
                 />
 
             </List.Item>
-       
+  </View>
+}
+
+{this.props.dataSource.groupByTime.length > 0 && 
+  <View>
             <List.Item 
               style={styles.listHeader}
             >
@@ -183,7 +197,11 @@ export default class TableList extends React.Component {
                 />
 
             </List.Item>
+  </View>
+}
+
         </List>
+
     )
   }
 

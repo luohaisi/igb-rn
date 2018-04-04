@@ -58,19 +58,19 @@ export default class LoginModal extends Component {
       <View style={{
         flex: 1,
         flexDirection: 'column',
-        justifyContent: 'space-between',
+        justifyContent: 'flex-start',
         alignItems: 'center',
         backgroundColor:'rgb(19,125,188)'
       }}>
-        <View style={{marginTop:100}} >
+        <View style={{margin:10,marginTop:30}} >
           <Image style={{width:120,height:75}} source={require('../../Images/logo.png')} />
         </View>
-        <View style={{alignItems:'center',marginTop:30}} >
+        <View style={{alignItems:'center'}} >
           <Text style={{color:'#F2F2F2',fontSize:20}}>绿智汇阳光采购云平台</Text>
           <WhiteSpace/>
           <Text style={{color:'#ccc',fontSize:16}}>Welcome To Our App</Text>
         </View>
-        <View style={{width: '80%'}}>          
+        <View style={{width: '80%', marginTop:10}}>          
 
           <TextInput
             style={styles.textInput}
@@ -90,7 +90,7 @@ export default class LoginModal extends Component {
             underlineColorAndroid="rgb(45,155,212)"
           />
 
-          <WhiteSpace size='xl' />
+          <WhiteSpace size='md' />
 
           <Button type="primary" 
                   inline 
@@ -103,7 +103,7 @@ export default class LoginModal extends Component {
 
         </View>        
 
-        <View style={{height: 100}} >
+        <View style={{height: 300}} >
         </View>
 
         <ActivityIndicator animating={this.state.showLoading} toast text="登陆中" color="white" />
