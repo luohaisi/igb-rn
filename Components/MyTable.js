@@ -97,7 +97,7 @@ renderHeader = () => {
             <FlatList
                 data={this.props.dataSource}
                 renderItem={this._renderItem}
-                keyExtractor={(item, index) => index}
+                keyExtractor={(item, index) => index.toString()}
                 // ListHeaderComponent={this.renderHeader}
             />
 

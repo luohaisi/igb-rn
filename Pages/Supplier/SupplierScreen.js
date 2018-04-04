@@ -214,7 +214,7 @@ export default class SupplierScreen extends React.Component {
         <FlatList
           data={this.state.remoteData.supplierList}
           renderItem={this._renderItem}
-          keyExtractor={(item, index) => index}
+          keyExtractor={(item, index) => index.toString()}
           refreshing={true}
           scrollToEnd={()=>console.log('我是有底线的')}
         />

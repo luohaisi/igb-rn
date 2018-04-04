@@ -60,7 +60,7 @@ export default class Table extends React.Component {
               data={this.props.dataSource}
               ListHeaderComponent={this._renderHeader}
               renderItem={this._renderItem}
-              keyExtractor={(item, index) => index}
+              keyExtractor={(item, index) => index.toString()}
           />
     );
   }

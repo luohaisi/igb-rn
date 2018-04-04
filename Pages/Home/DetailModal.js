@@ -127,7 +127,7 @@ import {
                     <FlatList
                         data={this.state.remoteData}
                         renderItem={this._renderItem}
-                        keyExtractor={(item, index) => index}
+                        keyExtractor={(item, index) => index.toString()}
                         ListHeaderComponent={this.renderHeader}
                     />
                 </WingBlank>

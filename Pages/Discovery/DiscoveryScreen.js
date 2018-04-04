@@ -55,7 +55,7 @@ const newList = [
   {
     id:1,
     title:'生态双废透水混凝土',
-    cover:'http://mpur.igreenbuy.com/static/media/stsftshnt.612fbef8.jpg',
+    cover:'https://mpur.igreenbuy.com/static/media/stsftshnt.612fbef8.jpg',
     typeName:'绿色建筑',
     location:'上海',
     materials:'材料',
@@ -64,7 +64,7 @@ const newList = [
   {
     id:1,
     title:'钢渣透水混凝土',
-    cover:'http://mpur.igreenbuy.com/static/media/gztshnt.61d3ea79.jpg',
+    cover:'https://mpur.igreenbuy.com/static/media/gztshnt.61d3ea79.jpg',
     typeName:'海绵城市',
     location:'上海',
     materials:'材料',
@@ -73,7 +73,7 @@ const newList = [
   {
     id:1,
     title:'透光混凝土',
-    cover:'http://mpur.igreenbuy.com/static/media/stsftshnt.612fbef8.jpg',
+    cover:'https://mpur.igreenbuy.com/static/media/tghnt-param2.2f5ade8a.jpg',
     typeName:'绿色建筑',
     location:'上海',
     materials:'材料',
@@ -82,7 +82,7 @@ const newList = [
   {
     id:1,
     title:'UHPC',
-    cover:'http://mpur.igreenbuy.com/static/media/uhpc.b98f2758.jpg',
+    cover:'https://mpur.igreenbuy.com/static/media/uhpc.b98f2758.jpg',
     typeName:'道路桥梁',
     location:'上海',
     materials:'材料',

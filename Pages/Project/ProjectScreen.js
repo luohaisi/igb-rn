@@ -177,7 +177,7 @@ export default class ProjectsScreen extends React.Component {
         <FlatList
           data={this.state.remoteData.list}
           renderItem={this._renderItem}
-          keyExtractor={(item, index) => index}
+          keyExtractor={(item, index) => index.toString()}
           refreshing={true}
           onEndReached={this._onEndReached}
           // extraData={}
