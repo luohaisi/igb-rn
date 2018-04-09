@@ -22,7 +22,7 @@ export default class SupplierScreen extends React.Component {
     super(props);
     // 基本属性
     this.filterCondition = {
-      pageSize:30,
+      pageSize:10,
       pageNumber:1
     }
 
@@ -30,6 +30,7 @@ export default class SupplierScreen extends React.Component {
 
     this.state = {
       remoteData:[],
+      supplierList:[],
       searchKey:'',
       renderView:false
     }
@@ -87,7 +88,8 @@ export default class SupplierScreen extends React.Component {
     }).then((res) => {
       if(res.return_code == '0' && res.return_message == "Success"){
         this.setState({
-          remoteData: res.result[0]
+          remoteData: res.result[0],
+          supplierList:[ ...this.state.supplierList, ...res.result[0].supplierList ]
         })
         // console.log('remoteData', res.result[0])
       }else{
@@ -131,7 +133,26 @@ export default class SupplierScreen extends React.Component {
         <WhiteSpace />
       </View>
     </Item>
-)
+  )
+
+  _fetchMoreData= () => {        
+
+    this.filterCondition.pageNumber++
+    this.getRemoteData()
+  }
+
+  _renderFooter = () => {
+
+  return (
+    <View>
+      {this.state.noMore ? 
+        <Text style={{alignSelf:'center', color:'#a1a1a1'}}>没有更多了</Text>  
+        :
+        <Button onClick={this._fetchMoreData}>加载更多</Button>
+      }
+    </View>
+  )
+  }
 
   render() {
     let supplierCount = 0
@@ -212,11 +233,12 @@ export default class SupplierScreen extends React.Component {
         </Flex>
         }
         <FlatList
-          data={this.state.remoteData.supplierList}
+          data={this.state.supplierList}
           renderItem={this._renderItem}
           keyExtractor={(item, index) => index.toString()}
           refreshing={true}
           scrollToEnd={()=>console.log('我是有底线的')}
+          ListFooterComponent={this._renderFooter}
         />
         <WhiteSpace size="lg" />
         <WhiteSpace size="lg" />

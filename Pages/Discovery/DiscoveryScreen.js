@@ -16,7 +16,8 @@ import {
 } from '../../Conf/HtmlChart'
 
 import {
-  getIconName
+  getIconName,
+  dateFormat
 } from '../../Utils/functions'
 
 const data = [
@@ -94,11 +95,18 @@ export default class DiscoveryScreen extends React.Component {
 
   constructor(props) {
     super(props);
+    // 设置默认开始时间
+    const current = new Date();
+    current.setDate(current.getDate() - 365)
 
     this.state = {
       remoteData:[],
       renderView:false
     }
+    this.pc_type = 'PC预制外墙板'
+    this.spec = "清水"
+    this.startdate = this._dateFormatTrans(dateFormat(current))
+    this.enddate = this._dateFormatTrans(dateFormat(new Date()))
 
     this.willFocusSubscription
   }
@@ -136,14 +144,16 @@ export default class DiscoveryScreen extends React.Component {
    getRemoteData = () => {
     
     let token = this.token
-    getRemoteData({
-      enddate:'201802',
-      startdate:'201701',
-      pc_type:'PC预制外墙板',
-      spec:"清水",
+    let params = {
+      startdate:this.startdate,
+      enddate:this.enddate,
+      pc_type:this.pc_type,
+      spec:this.spec,
       token,
       requestType: 'FETCH_PC_PRICE_LIST'
-    }).then((res) => {
+    }
+    // console.log('params', params)
+    getRemoteData(params).then((res) => {
       if(res.return_code == '0' && res.return_message == "Success"){
         this.setState({
           remoteData: res.result[0],
@@ -162,13 +172,22 @@ export default class DiscoveryScreen extends React.Component {
     })
   }
 
+  _dateFormatTrans = (date) => {
+    const year = date.split('-')[0]
+    const month = date.split('-')[1].length == 2 ? date.split('-')[1] : '0' + date.split('-')[1]
+    return  year + month
+  }
+
   _onUpdateFilter = (params) => {
 
-    this.filterCondition = params
+    this.pc_type = params.pc_type
+    this.spec = params.spec
+    this.enddate = this._dateFormatTrans(params.pbEndDate)
+    this.startdate = this._dateFormatTrans(params.pbBeginDate)
 
-    // this.getRemoteData()
+    this.getRemoteData()
 
-    console.log('_onUpdateFilter', params)
+    // console.log('_onUpdateFilter', params)
   }
 
   render() {
@@ -182,7 +201,7 @@ export default class DiscoveryScreen extends React.Component {
       return (
         <ScrollView>
           <WingBlank size="sm" style={{backgroundColor:'#FFF'}}>
-            <Grid 
+            {/* <Grid 
               data={data} 
               // itemStyle={{ height: 150, backgroundColor: 'rgba(0,0,0,.05)' }}
               hasLine={false}
@@ -201,12 +220,12 @@ export default class DiscoveryScreen extends React.Component {
                 </Flex>
                 
               )}
-            />
-
+            /> */}
+            <WhiteSpace />
             <FiltersSection 
               onUpdateFilter={this._onUpdateFilter} 
               showSearchbar={false}
-              showFilterList={[4,5]}
+              showFilterList={[4,6]}
             />
             <WhiteSpace />
 
@@ -217,7 +236,8 @@ export default class DiscoveryScreen extends React.Component {
             </List.Item>
             <List.Item multipleLine>
                 <WebView
-                  source={{html: htmlPCByType}}
+                  source={{html: htmlPCByType, baseUrl: ''}}
+                  scrollEnabled={false}
                   style={{height:200,paddingBottom:0}}
                   renderLoading={()=>{return (<ActivityIndicator toast text="正在加载" />)}}
                 />

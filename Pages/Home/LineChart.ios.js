@@ -25,7 +25,8 @@ export default class LineChart extends React.Component {
     return (
             <WebView
               source={{html: html}}
-              style={{height:190,paddingBottom:0}}
+              scrollEnabled={false}
+              style={{height:210,paddingBottom:0}}
               renderLoading={()=>{return (<ActivityIndicator toast text="正在加载" />)}}
             />
     );

@@ -35,7 +35,7 @@ export default class ProjectsScreen extends React.Component {
       piType:2,
       pbBeginDate:'2017-1',
       pbEndDate:'2018-3',
-      pageSize:30,
+      pageSize:10,
       pageNumber:1
     }
 
@@ -43,6 +43,8 @@ export default class ProjectsScreen extends React.Component {
 
     this.state = {
       remoteData:[],
+      list:[],
+      noMore:false,
       piStatus:'进行中',
       piType:2,
       searchKey:'',
@@ -94,7 +96,9 @@ export default class ProjectsScreen extends React.Component {
     }).then((res) => {
       if(res.return_code == '0' && res.return_message == "Success"){
         this.setState({
-          remoteData: res.result[0]
+          remoteData: res.result[0],
+          list:[ ...this.state.list, ...res.result[0].list ],
+          noMore:res.result[0].list.length > 0 ? false : true
         })
         // console.log('remoteData', res.result[0])
       }else{
@@ -114,10 +118,10 @@ export default class ProjectsScreen extends React.Component {
 
     this.getRemoteData()
 
-    console.log('_onUpdateFilter', params)
+    // console.log('_onUpdateFilter', params)
   }
 
-  _renderItem = ({item}) => (
+  _renderItem = ({item, index}) => (
       <Item
           arrow="horizontal"
           // extra={<Text>{item.pitStatus}</Text>}
@@ -161,9 +165,29 @@ export default class ProjectsScreen extends React.Component {
   )
 
   _onEndReached = (info) => {
+    // console.log('_onEndReached', info)
     this.setState({
       pageNumber:2
     })
+  }
+
+  _fetchMoreData= () => {        
+
+      this.filterCondition.pageNumber++
+      this.getRemoteData()
+  }
+
+  _renderFooter = () => {
+
+    return (
+      <View>
+        {this.state.noMore ? 
+          <Text style={{alignSelf:'center', color:'#a1a1a1'}}>没有更多了</Text>  
+          :
+          <Button onClick={this._fetchMoreData}>加载更多</Button>
+        }
+      </View>
+    )
   }
 
   render() {
@@ -175,14 +199,17 @@ export default class ProjectsScreen extends React.Component {
         <FiltersSection onUpdateFilter={this._onUpdateFilter} />
         <WhiteSpace />
         <FlatList
-          data={this.state.remoteData.list}
+          data={this.state.list}
           renderItem={this._renderItem}
           keyExtractor={(item, index) => index.toString()}
           refreshing={true}
           onEndReached={this._onEndReached}
           // extraData={}
           refreshing={true}
+          // ListEmptyComponent={<Text>此处空空如也</Text>}
+          ListFooterComponent={this._renderFooter}
         />
+        <WhiteSpace size="xl" />
       </WingBlank>
       )
     }else{

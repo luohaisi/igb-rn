@@ -84,11 +84,10 @@ renderDateRangeView = () => {
               <Flex wrap="wrap">    
                   {
                       [
-                          {name:'近一年',value:getDateInterval(365)},
-                          {name:'2017',value:{from:'2017-01-01', to:'2017-12-31'}},
-                          {name:'上个月',value:[]},
-                          // {name:'三季度',value:[]},
-                          // {name:'四季度',value:[]}
+                          
+                        {name:'近30天',value:getDateInterval(30)},
+                        {name:'近60天',value:getDateInterval(60)},
+                        {name:'近90天',value:getDateInterval(90)}
                       ].map((item,key) => {
                           return (<Tag 
                                       key={key}

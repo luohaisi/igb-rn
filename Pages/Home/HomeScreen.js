@@ -3,8 +3,8 @@
  * @author luohaisi
  */
 import React from 'react';
-import { View, Text, Button, Modal, ScrollView } from 'react-native';
-import { WingBlank, WhiteSpace, Toast } from 'antd-mobile';
+import { View, Text, Modal, ScrollView, Linking, Platform } from 'react-native';
+import { WingBlank, WhiteSpace, Toast, NoticeBar, Button, Modal as ModalAntd, Flex } from 'antd-mobile';
 var ls = require('react-native-local-storage');
 
 import DateFilterSection from './DateFilterSection'
@@ -20,13 +20,17 @@ import {
   dateFormat
 } from '../../Utils/functions'
 
+// 版本检测接口
+const url = 'http://www.igreenbuy.com/mobile/caigou.php?app=' + Platform.OS
+const currentVersion = '2.0.1'
+
 export default class HomeScreen extends React.Component {
 
   constructor(props) {
     super(props);
     // 设置默认开始时间
     const current = new Date();
-    current.setDate(current.getDate() - 365)
+    current.setDate(current.getDate() - 90)
     // 基本属性
     this.chooseCate = 3;
 
@@ -44,7 +48,8 @@ export default class HomeScreen extends React.Component {
     this.state = {
       showLoginModal: false,
       error:null,
-      remoteData:null
+      remoteData:null,
+      showNoticeBar:false
     };
   }
 
@@ -88,6 +93,45 @@ export default class HomeScreen extends React.Component {
       }
       
     });
+
+    this._needToUpdate()
+
+  }
+
+  _renderMessage = (version) => {
+
+    return(
+`
+有新的版本可供下载:
+当前版本: ${currentVersion}
+更新版本: ${version}
+`
+    )
+  }
+
+  // 是否需要更新
+  _needToUpdate = () => {
+
+    fetch(url)
+    .then((response) => response.json())
+    .then((responseJson) => {
+      // console.log('responseJson', responseJson)
+      if(responseJson.version > currentVersion){
+        // 弹出提示框，跳转到下载链接
+        ModalAntd.alert('更新提示', <Text style={{color:'#a1a1a1'}}>{this._renderMessage(responseJson.version)}</Text>, [
+          { text: '暂不下载', onPress: () => console.log('cancel'),style:{color:'#a1a1a1'} },
+          {
+            text: '马上下载',
+            onPress: () => this._notice(responseJson.url),
+          },
+        ])
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+
+    
   }
 
   // 获取/更新远程服务器数据
@@ -109,13 +153,7 @@ export default class HomeScreen extends React.Component {
           this.setState({
             remoteData: res.result[0]
           })
-          // console.log('getRemoteData', res.result[0].materialStatData)
-        // }else if (res.return_code == '-1' && res.return_message == "(Mobile)未登录或者登陆失效, 请重新登录"){
-        //   //TOFIX: 失败后需要登陆，清空localStorage,弹出登陆页
-        //   this.setState({
-        //     showLoginModal:true,
-        //     remoteData:null
-        //   })
+
         }else{
           // ls.remove('userInfo')
           Toast.fail(res.return_message, 2, ()=>{
@@ -179,6 +217,19 @@ export default class HomeScreen extends React.Component {
     this.chooseCate = tab.cateId
     this.getRemoteData()
   }
+
+  _notice = (url) => {
+    Linking.canOpenURL(url).then(supported => {
+      if (!supported) {
+        console.log('Can\'t handle url: ' + url);
+      } else {
+        return Linking.openURL(url);
+      }
+    }).catch(err => console.error('An error occurred', err));
+    this.setState({
+      showNoticeBar:false
+    })
+  }
     
   // 视图渲染部分
   renderView() {
@@ -186,6 +237,12 @@ export default class HomeScreen extends React.Component {
     return (
       <ScrollView>
       <WingBlank size="sm" style={{marginBottom:10}}>
+        {/* 通知 */}
+        {/* {this.state.showNoticeBar && 
+          <NoticeBar mode="link" action={<Button type="primary" size="small" inline onClick={this._notice}>去下载</Button>}>
+            有新的版本可供下载
+          </NoticeBar>
+        } */}
         {/* 顶部筛选条件区块 */}
         <DateFilterSection
           params={{

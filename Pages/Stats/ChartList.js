@@ -40,7 +40,9 @@ export default class ChartList extends React.Component {
             </List.Item>
             <List.Item multipleLine>
               <WebView
-                source={{html: htmlGroupByEnt}}
+                mixedContentMode="always"
+                scrollEnabled={false}
+                source={{html: htmlGroupByEnt, baseUrl: ''}}
                 style={{height:190,paddingBottom:0}}
                 renderLoading={()=>{return (<ActivityIndicator toast text="正在加载" />)}}
               />
@@ -54,7 +56,9 @@ export default class ChartList extends React.Component {
             </List.Item>
             <List.Item multipleLine>
               <WebView
-                source={{html: htmlGroupByEnt2}}
+                mixedContentMode="always"
+                scrollEnabled={false}
+                source={{html: htmlGroupByEnt2, baseUrl: ''}}
                 style={{height:190,paddingBottom:0}}
                 renderLoading={()=>{return (<ActivityIndicator toast text="正在加载" />)}}
               />
@@ -71,7 +75,9 @@ export default class ChartList extends React.Component {
             </List.Item>
             <List.Item multipleLine>
               <WebView
-                source={{html: htmlGroupByCate}}
+                mixedContentMode="always"
+                scrollEnabled={false}
+                source={{html: htmlGroupByCate, baseUrl: ''}}
                 style={{height:190,paddingBottom:0}}
                 renderLoading={()=>{return (<ActivityIndicator toast text="正在加载" />)}}
               />
@@ -88,7 +94,9 @@ export default class ChartList extends React.Component {
             </List.Item>
             <List.Item multipleLine>
               <WebView
-                source={{html: htmlGroupByCate2}}
+                mixedContentMode="always"
+                scrollEnabled={false}
+                source={{html: htmlGroupByCate2, baseUrl: ''}}
                 style={{height:190,paddingBottom:0}}
                 renderLoading={()=>{return (<ActivityIndicator toast text="正在加载" />)}}
               />
@@ -105,7 +113,9 @@ export default class ChartList extends React.Component {
             </List.Item>
             <List.Item multipleLine>
               <WebView
-                source={{html: htmlGroupByTime}}
+                mixedContentMode="always"
+                scrollEnabled={false}
+                source={{html: htmlGroupByTime, baseUrl: ''}}
                 style={{height:190,paddingBottom:0}}
                 renderLoading={()=>{return (<ActivityIndicator toast text="正在加载" />)}}
               />

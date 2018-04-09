@@ -31,6 +31,7 @@ export default class BarChart extends React.Component {
     return (
             <WebView
               source={{html: html}}
+              scrollEnabled={false}
               style={{height:data.length * 70,paddingBottom:0}}
               renderLoading={()=>{return (<ActivityIndicator toast text="正在加载" />)}}
             />

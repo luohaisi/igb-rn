@@ -153,21 +153,21 @@ export default class TongScreen extends React.Component {
       <Flex>
       <Flex.Item>
         <WebView
-          source={{html: html1}}
+          source={{html: html1, baseUrl: ''}}
           style={{height:190}}
           renderLoading={()=>{return (<ActivityIndicator toast text="正在加载" />)}}
         />
       </Flex.Item>
       <Flex.Item>
         <WebView
-          source={{html: html2}}
+          source={{html: html2, baseUrl: ''}}
           style={{height:190}}
           renderLoading={()=>{return (<ActivityIndicator toast text="正在加载" />)}}
         />
       </Flex.Item>
       <Flex.Item>
         <WebView
-          source={{html: html3}}
+          source={{html: html3, baseUrl: ''}}
           style={{height:190}}
           renderLoading={()=>{return (<ActivityIndicator toast text="正在加载" />)}}
         />

@@ -291,6 +291,14 @@ const getFilterLocations = (locations) => {
     return result
 }
 
+const getFilterPcItems = (pcItems) => {
+    const result = []
+    pcItems.map((item) => {
+        result.push({label:item.pc_type + '-' + item.spec, value:item.pc_type + '-' + item.spec})
+    })
+    return result
+}
+
 const getIconName = (typeName) => {
 
     switch(typeName){
@@ -326,5 +334,6 @@ const getIconName = (typeName) => {
     getFilterCategories,
     getFilterEnts,
     getFilterLocations,
+    getFilterPcItems,
     getIconName
  }

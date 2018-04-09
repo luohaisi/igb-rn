@@ -21,6 +21,7 @@ import {
   getFilterCategories, 
   getFilterEnts, 
   getFilterLocations, 
+  getFilterPcItems,
   dateFormat, 
   // getDateInterval 
 } from '../../Utils/functions'
@@ -41,7 +42,7 @@ const statusList =[
 ];
 
 // const filterList  = [0,1,2,3,4,5,6]
-const filterList  = ['材料','进行中','比价','公司','时间','全国']
+const filterList  = ['材料','进行中','比价','公司','时间','全国', 'PC类型']
 
 export default class FiltersSection extends React.Component {
 
@@ -55,6 +56,7 @@ export default class FiltersSection extends React.Component {
           statCategories:[],
           subEnts:[],
           locations:[],
+          pcItems:[],
           cateId:null,
           cateName:'材料',
           piStatus:'进行中',
@@ -71,7 +73,10 @@ export default class FiltersSection extends React.Component {
           cataValue:null,
           entValue:null,
           dateFrom : current,
-          dateTo : new Date()
+          dateTo : new Date(),
+          pcItemsValue:null,
+          pc_type:'PC预制外墙板',
+          spec:"清水",
         }
 
         this.showFilterList = this.props.showFilterList == undefined ? [0,1,2,3,4,5] : this.props.showFilterList
@@ -92,9 +97,10 @@ export default class FiltersSection extends React.Component {
         this.setState({
           statCategories:getFilterCategories(data.statCategories),
           subEnts:getFilterEnts(data.subEnts),
-          locations:getFilterLocations(data.locations)
+          locations:getFilterLocations(data.locations),
+          pcItems:getFilterPcItems(data.pcItems)
         })
-        // console.log('getFilterEnts',this.state.subEnts)
+        // console.log('getFilterPcItems',this.state.pcItems)
       });
     }
 
@@ -174,6 +180,15 @@ export default class FiltersSection extends React.Component {
       })
     }
 
+    onPcItemsPickerChange = (pcItemsValue) => {
+
+      this.setState({
+        pcItemsValue,
+        pc_type:pcItemsValue[0].split('-')[0],
+        spec:pcItemsValue[0].split('-')[1]
+      })
+    }
+
     onScrollChange = (value) => {
       // console.log('onScrollChange', value);
     }
@@ -194,6 +209,8 @@ export default class FiltersSection extends React.Component {
         location:this.state.location,
         pbBeginDate:dateFormat(this.state.dateFrom),
         pbEndDate:dateFormat(this.state.dateTo),
+        pc_type:this.state.pc_type,
+        spec:this.state.spec,
         searchKey:this.state.searchKey,
         pageSize:30,
         pageNumber:1,
@@ -264,6 +281,13 @@ export default class FiltersSection extends React.Component {
               {this.state.locstionName && this.state.locstionName != '全国' &&  this.showFilterList.indexOf(5) > -1 &&
                 <Text style={styles.filterTag} onPress={() => console.log('1st')}>{this.state.locstionName}</Text>
               }
+
+              {this.showFilterList.indexOf(6) > -1 && 
+                <Text style={styles.filterTag} onPress={() => console.log('1st')}>
+                    {this.state.pc_type} - {this.state.spec}
+                </Text>
+              }
+
             </Flex>
             {/* 筛选内容标签end */}
             <WhiteSpace />
@@ -351,6 +375,15 @@ export default class FiltersSection extends React.Component {
                     onChange={this.onLocationPickerChange}
                     value={this.state.locationValue}
                     data={this.state.locations}
+                    cols={1}
+                  />
+                }
+
+                {this.showFilterList[this.state.selectedIndex] == 6 &&
+                  <PickerView
+                    onChange={this.onPcItemsPickerChange}
+                    value={this.state.pcItemsValue}
+                    data={this.state.pcItems}
                     cols={1}
                   />
                 }
