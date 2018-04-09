@@ -42,21 +42,21 @@ export default class SettingsScreen extends React.Component {
         // console.info('logout', response)
         Toast.hide()
   
-        if(response.return_code == '0' && response.return_message == "Success"){
+        // if(response.return_code == '0' && response.return_message == "Success"){
   
-            ls.clear().then(()=>{
-              Toast.loading('退出成功', 1, ()=>{
-                TheBrowser.setState({
-                  remoteData:null,
-                  showLoginModal:true
-                })
-                this.props.navigation.goBack()
-                this.props.navigation.navigate('Home')
-              });
+        ls.clear().then(()=>{
+          Toast.loading('退出成功', 1, ()=>{
+            TheBrowser.setState({
+              remoteData:null,
+              showLoginModal:true
             })
-        }else{
-          Toast.fail(response.return_message, 2);
-        }
+            this.props.navigation.goBack()
+            this.props.navigation.navigate('Home')
+          });
+        })
+        // }else{
+        //   Toast.fail(response.return_message, 2);
+        // }
   
       });
 

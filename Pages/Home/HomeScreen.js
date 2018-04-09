@@ -21,7 +21,7 @@ import {
 } from '../../Utils/functions'
 
 // 版本检测接口
-const url = 'http://www.igreenbuy.com/mobile/caigou.php?app=' + Platform.OS
+const url = 'https://www.igreenbuy.com/mobile/caigou.php?app=' + Platform.OS
 const currentVersion = '2.0.1'
 
 export default class HomeScreen extends React.Component {
