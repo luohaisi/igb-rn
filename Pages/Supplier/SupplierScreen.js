@@ -31,6 +31,7 @@ export default class SupplierScreen extends React.Component {
     this.state = {
       remoteData:[],
       supplierList:[],
+      noMore:false,
       searchKey:'',
       renderView:false
     }
@@ -94,7 +95,8 @@ export default class SupplierScreen extends React.Component {
       if(res.return_code == '0' && res.return_message == "Success"){
         this.setState({
           remoteData: res.result[0],
-          supplierList:[ ...this.state.supplierList, ...res.result[0].supplierList ]
+          supplierList:[ ...this.state.supplierList, ...res.result[0].supplierList ],
+          noMore:res.result[0].supplierList.length > 0 ? false : true
         })
         // console.log('remoteData', res.result[0])
       }else{
