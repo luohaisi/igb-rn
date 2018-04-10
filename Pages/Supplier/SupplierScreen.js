@@ -150,30 +150,12 @@ export default class SupplierScreen extends React.Component {
     this.getRemoteData()
   }
 
-  _renderFooter = () => {
-
-  return (
-    <View>
-      {this.state.noMore ? 
-        <Text style={{alignSelf:'center', color:'#a1a1a1'}}>没有更多了</Text>  
-        :
-        <Button onClick={this._fetchMoreData}>加载更多</Button>
-      }
-    </View>
-  )
-  }
-
-  render() {
+  _renderHeader = () => {
     let supplierCount = 0
     let activeSupplierCount = 0
-    if(this.state.renderView === true){
-      return (
-        <WingBlank size="sm" style={{marginBottom:135}}>
-        
-        <FiltersSection onUpdateFilter={this._onUpdateFilter} />
-        <WhiteSpace />
 
-        {this.state.remoteData.hasStatGroupByEnt ?
+    return(
+      this.state.remoteData.hasStatGroupByEnt ?
         <Accordion style={{marginBottom:10, backgroundColor:'#fff', borderRadius:5}}>
           <Accordion.Panel header={
             <Flex style={{paddingTop:10, paddingBottom:10}}>
@@ -240,20 +222,40 @@ export default class SupplierScreen extends React.Component {
             
           </Flex.Item>
         </Flex>
-        }
+        
+    )
+  }
+
+  _renderFooter = () => {
+
+  return (
+    <View>
+      {this.state.noMore ? 
+        <Text style={{alignSelf:'center', color:'#a1a1a1'}}>没有更多了</Text>  
+        :
+        <Button onClick={this._fetchMoreData}>加载更多</Button>
+      }
+    </View>
+  )
+  }
+
+  render() {
+    
+    if(this.state.renderView === true){
+      return (
+        <WingBlank size="sm" style={{marginBottom:85}}>
+        
+        <FiltersSection onUpdateFilter={this._onUpdateFilter} />
+        <WhiteSpace />
         <FlatList
           data={this.state.supplierList}
           renderItem={this._renderItem}
           keyExtractor={(item, index) => index.toString()}
           refreshing={true}
-          scrollToEnd={()=>console.log('我是有底线的')}
+          // scrollToEnd={()=>console.log('我是有底线的')}
+          ListHeaderComponent={this._renderHeader}
           ListFooterComponent={this._renderFooter}
         />
-        <WhiteSpace size="lg" />
-        <WhiteSpace size="lg" />
-        <WhiteSpace size="lg" />
-        <WhiteSpace size="lg" />
-        <WhiteSpace size="lg" />
       </WingBlank>
       );
     }else{
