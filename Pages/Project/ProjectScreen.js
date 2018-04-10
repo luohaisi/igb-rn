@@ -227,7 +227,7 @@ export default class ProjectsScreen extends React.Component {
 
     if(this.state.renderView === true){
       return (
-      <WingBlank size="sm" style={{marginBottom:150}}>
+      <WingBlank size="sm" style={{marginBottom:130}}>
         
         <FiltersSection onUpdateFilter={this._onUpdateFilter} />
         
