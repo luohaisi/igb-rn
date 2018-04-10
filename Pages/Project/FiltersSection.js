@@ -212,7 +212,7 @@ export default class FiltersSection extends React.Component {
         pc_type:this.state.pc_type,
         spec:this.state.spec,
         searchKey:this.state.searchKey,
-        pageSize:30,
+        pageSize:10,
         pageNumber:1,
       }
       this.props.onUpdateFilter(filterCondition)

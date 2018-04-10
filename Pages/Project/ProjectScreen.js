@@ -69,6 +69,12 @@ export default class ProjectsScreen extends React.Component {
   )
 
   _init(){
+    // 重新打开后页码还原
+    this.filterCondition.pageNumber = 1
+
+    this.setState({
+      list:[]
+    })
 
     // 从接口请求默认数据
     ls.get('userInfo').then((data) => {
@@ -113,6 +119,10 @@ export default class ProjectsScreen extends React.Component {
   }
 
   _onUpdateFilter = (params) => {
+
+    this.setState({
+      list:[]
+    })
 
     this.filterCondition = params
 
@@ -164,17 +174,40 @@ export default class ProjectsScreen extends React.Component {
       </Item>
   )
 
-  _onEndReached = (info) => {
-    // console.log('_onEndReached', info)
-    this.setState({
-      pageNumber:2
-    })
-  }
+  // _onEndReached = (info) => {
+  //   // console.log('_onEndReached', info)
+  //   this.setState({
+  //     pageNumber:2
+  //   })
+  // }
 
   _fetchMoreData= () => {        
 
       this.filterCondition.pageNumber++
       this.getRemoteData()
+  }
+
+  _renderHeader = () => {
+
+    return(
+        <Flex style={{backgroundColor:'#FFF',paddingBottom:10,paddingTop:10,marginBottom:10,borderRadius:5}}>
+          <Flex.Item>
+            <Text style={{color:'#a1a1a1',paddingTop:5,alignSelf:'center'}}>
+              项目总数: <Text style={{color: 'red'}}>{this.state.remoteData.totalPiCount}</Text>
+            </Text>
+          </Flex.Item>
+          <Flex.Item>
+            <Text style={{color:'#a1a1a1',paddingTop:5,alignSelf:'center'}}>
+              邀请报价: <Text style={{color: 'red'}}>{this.state.remoteData.AllInvitedPiCount}</Text>
+            </Text>
+          </Flex.Item>
+          <Flex.Item>
+            <Text style={{color:'#a1a1a1',paddingTop:5,alignSelf:'center'}}>
+              市场报价: <Text style={{color: 'green'}}>{this.state.remoteData.MarketQuotePiCount}</Text>
+            </Text>
+          </Flex.Item>
+        </Flex>
+    )
   }
 
   _renderFooter = () => {
@@ -194,19 +227,20 @@ export default class ProjectsScreen extends React.Component {
 
     if(this.state.renderView === true){
       return (
-      <WingBlank size="sm" style={{marginBottom:136}}>
+      <WingBlank size="sm" style={{marginBottom:150}}>
         
         <FiltersSection onUpdateFilter={this._onUpdateFilter} />
-        <WhiteSpace />
+        
         <FlatList
           data={this.state.list}
           renderItem={this._renderItem}
           keyExtractor={(item, index) => index.toString()}
           refreshing={true}
-          onEndReached={this._onEndReached}
+          // onEndReached={this._onEndReached}
           // extraData={}
           refreshing={true}
           // ListEmptyComponent={<Text>此处空空如也</Text>}
+          ListHeaderComponent={this._renderHeader}
           ListFooterComponent={this._renderFooter}
         />
         <WhiteSpace size="xl" />

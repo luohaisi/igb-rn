@@ -3,9 +3,10 @@
  * @author luohaisi
  */
 import React from 'react';
-import { View, Text, Modal, ScrollView, Linking, Platform } from 'react-native';
+import { View, Text, Modal, ScrollView, Linking } from 'react-native';
 import { WingBlank, WhiteSpace, Toast, NoticeBar, Button, Modal as ModalAntd, Flex } from 'antd-mobile';
 var ls = require('react-native-local-storage');
+var Conf = require('../../Conf/Host.js')
 
 import DateFilterSection from './DateFilterSection'
 import GeneralStatSection from './GeneralStatSection'
@@ -17,12 +18,13 @@ import LoginModal from './LoginModal'
 import {getRemoteData}  from '../../Services/CommonService.js'
 
 import {
-  dateFormat
+  dateFormat,
+  getFilterLocations
 } from '../../Utils/functions'
 
-// 版本检测接口
-const url = 'https://www.igreenbuy.com/mobile/caigou.php?app=' + Platform.OS
-const currentVersion = '2.0.1'
+// 版本检测接口 -> 转移到conf/host.js
+// const url = 'https://www.igreenbuy.com/mobile/caigou.php?app=' + Platform.OS
+// const currentVersion = '2.0.1'
 
 export default class HomeScreen extends React.Component {
 
@@ -77,12 +79,7 @@ export default class HomeScreen extends React.Component {
         this.token = data.token
         this.entShortName = data.entShortName
         this.entId = data.entId
-        this.locations = data.locations.map((item, key) => {
-          return{
-            label:item.value,
-            value:item.id,
-          }
-        })
+        this.locations = getFilterLocations(data.locations)
         // 获取远程数据
         this.getRemoteData()
   
@@ -103,7 +100,7 @@ export default class HomeScreen extends React.Component {
     return(
 `
 有新的版本可供下载:
-当前版本: ${currentVersion}
+当前版本: ${Conf.currentVersion}
 更新版本: ${version}
 `
     )
@@ -112,11 +109,11 @@ export default class HomeScreen extends React.Component {
   // 是否需要更新
   _needToUpdate = () => {
 
-    fetch(url)
+    fetch(Conf.URL_FOR_UPDATE)
     .then((response) => response.json())
     .then((responseJson) => {
       // console.log('responseJson', responseJson)
-      if(responseJson.version > currentVersion){
+      if(responseJson.version > Conf.currentVersion){
         // 弹出提示框，跳转到下载链接
         ModalAntd.alert('更新提示', <Text style={{color:'#a1a1a1'}}>{this._renderMessage(responseJson.version)}</Text>, [
           { text: '暂不下载', onPress: () => console.log('cancel'),style:{color:'#a1a1a1'} },

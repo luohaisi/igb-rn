@@ -6,9 +6,15 @@ import React from 'react';
 import { View, Text, Alert, WebView } from 'react-native';
 import { SegmentedControl, List, Flex, ActivityIndicator } from 'antd-mobile';
 
+import {HomeBarChart} from '../../Conf/HtmlChart'
+
+
 export default class BarChart extends React.Component {
 
-  
+  constructor(props){
+    super(props)
+  }
+
   render() {
 
     const data = this.props.dataSource
@@ -16,22 +22,19 @@ export default class BarChart extends React.Component {
       return <Text>nothing</Text>
     }
     const dataStr = JSON.stringify(this.props.dataSource)
-    const cateName = this.props.cateId == 1 ? '立方' : '吨'
-    let params = {
-      dataStr:dataStr,
-      cateName:cateName
-    }
-    const randNum = Math.random()
+
+    const cateName = JSON.stringify(this.props.cateId == 1 ? '立方' : '吨')
+
+    const html = HomeBarChart(dataStr,cateName)
       
+  // console.log('injectedJavaScript', dataStr)
     return (
-      <View>
-        <WebView
-          // source={{uri: 'http://igb.oss-cn-shanghai.aliyuncs.com/LineChart.html'}}
-          source={{uri: 'http://106.15.88.4/index.php/bar?'+randNum, method:'POST', body:JSON.stringify(params)}}
-          style={{height:data.length * 70,paddingBottom:0}}
-          renderLoading={()=>{return (<ActivityIndicator toast text="正在加载" />)}}
-        />
-      </View>
+            <WebView
+              source={{html: html, baseUrl: ''}}
+              scrollEnabled={false}
+              style={{height:data.length * 70,paddingBottom:0}}
+              renderLoading={()=>{return (<ActivityIndicator toast text="正在加载" />)}}
+            />
     );
   }
 }

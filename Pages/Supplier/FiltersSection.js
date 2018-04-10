@@ -106,7 +106,7 @@ export default class FiltersSection extends React.Component {
         cateId:this.state.cateId,
         entId:this.state.ent,
         searchKey:this.state.searchKey,
-        pageSize:100,
+        pageSize:10,
         pageNumber:1,
       }
       this.props.onUpdateFilter(filterCondition)

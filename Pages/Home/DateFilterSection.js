@@ -22,7 +22,8 @@ export default class DeteFilterSection extends React.Component {
     this.state = {
       city: this.defaultCity,
       shortCutName:this.props.params.dateFrom + ' 至 ' + this.props.params.dateTo,
-      showDatePicker:false
+      showDatePicker:false,
+      cityValue:null
     };
   }
 
@@ -34,7 +35,8 @@ export default class DeteFilterSection extends React.Component {
       }
     })
     this.setState({
-      city:city
+      city:city,
+      cityValue:val
     })
     this.props.onCityChange(val[0])
   }
@@ -86,8 +88,8 @@ renderDateRangeView = () => {
                       [
                           
                         {name:'近30天',value:getDateInterval(30)},
-                        {name:'近60天',value:getDateInterval(60)},
-                        {name:'近90天',value:getDateInterval(90)}
+                        {name:'近90天',value:getDateInterval(90)},
+                        {name:'近180天',value:getDateInterval(180)}
                       ].map((item,key) => {
                           return (<Tag 
                                       key={key}
@@ -110,7 +112,7 @@ renderDateRangeView = () => {
 
           <Flex.Item style={{alignItems:'flex-start', flex:3}}>
             
-            <Picker data={this.props.params.locations} cols={1} onChange={this.onCityChange}>
+            <Picker data={this.props.params.locations} value={this.state.cityValue} cols={1} onChange={this.onCityChange}>
               <Button
                 inline 
                 size="small" 

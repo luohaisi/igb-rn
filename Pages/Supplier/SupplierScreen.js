@@ -63,6 +63,11 @@ export default class SupplierScreen extends React.Component {
   }
   
   _init(){
+    // 重新打开后页码还原
+    this.filterCondition.pageNumber = 1
+    this.setState({
+      supplierList:[]
+    })
     // 从接口请求默认数据
     ls.get('userInfo').then((data) => {
       if(data && data.token){
@@ -104,6 +109,10 @@ export default class SupplierScreen extends React.Component {
   }
 
   _onUpdateFilter = (params) => {
+
+    this.setState({
+      supplierList:[]
+    })
 
     this.filterCondition = params
 
