@@ -59,7 +59,7 @@ export default class HomeScreen extends React.Component {
     const { params } = navigation.state;
     
     return {
-      headerTitle: params ? params.title : '这是首页',
+      headerTitle: params ? params.title : '首页',
     }
   }
 
@@ -75,6 +75,7 @@ export default class HomeScreen extends React.Component {
     // 从接口请求默认数据
     ls.get('userInfo').then((data) => {
       if(data && data.token){
+        // 更新标题（公司名称）
         this.props.navigation.setParams({ title: data.entName })
         this.token = data.token
         this.entShortName = data.entShortName
@@ -199,6 +200,8 @@ export default class HomeScreen extends React.Component {
           }
         })
         this.token = userInfo.token
+        // 更新标题（公司名称）
+        this.props.navigation.setParams({ title: userInfo.entName })
         // 获取远程数据
         this.getRemoteData()
     })
@@ -207,8 +210,8 @@ export default class HomeScreen extends React.Component {
   }
 
   /**
-     * 按材料筛选
-     */
+   * 按材料筛选
+   */
   updateRemoteDataByCateId = (tab, index) => {
     // console.log('updateRemoteDataByCateId', tab.cateId)
     this.chooseCate = tab.cateId

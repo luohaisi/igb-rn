@@ -5,11 +5,14 @@
 import React from 'react';
 import { View, Text, FlatList, StyleSheet } from 'react-native';
 import { Flex, WingBlank, List, WhiteSpace, Button, Toast, Accordion, ActivityIndicator} from 'antd-mobile'
-import FiltersSection from './FiltersSection'
+import FiltersSection from '../Project/FiltersSection'
 import Ionicons from '../../Components/Ionicons';
 
 // Services
 import {getRemoteData}  from '../../Services/CommonService.js'
+import {
+  getFilterEnts
+} from '../../Utils/functions'
 
 var ls = require('react-native-local-storage');
 
@@ -33,7 +36,8 @@ export default class SupplierScreen extends React.Component {
       supplierList:[],
       noMore:false,
       searchKey:'',
-      renderView:false
+      renderView:false,
+      subEnts:null
     }
     this.didFocusSubscription
   }
@@ -73,6 +77,9 @@ export default class SupplierScreen extends React.Component {
     ls.get('userInfo').then((data) => {
       if(data && data.token){
         this.token = data.token
+        this.setState({
+          subEnts: getFilterEnts(data.subEnts)
+        })
         // 获取远程数据
         this.getRemoteData()
   
@@ -247,7 +254,13 @@ export default class SupplierScreen extends React.Component {
       return (
         <WingBlank size="sm" style={{marginBottom:85}}>
         
-        <FiltersSection onUpdateFilter={this._onUpdateFilter} />
+        {this.state.subEnts && 
+          <FiltersSection 
+            onUpdateFilter={this._onUpdateFilter} 
+            subEnts={this.state.subEnts}
+            showFilterList={[0,3]}
+             />
+        }
         <WhiteSpace />
         <FlatList
           data={this.state.supplierList}

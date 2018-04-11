@@ -42,7 +42,7 @@ const statusList =[
 ];
 
 // const filterList  = [0,1,2,3,4,5,6]
-const filterList  = ['材料','进行中','比价','公司','时间','全国', 'PC类型']
+const filterList  = ['材料','进行中','比价','公司','时间','城市', 'PC类型']
 
 export default class FiltersSection extends React.Component {
 
@@ -54,7 +54,7 @@ export default class FiltersSection extends React.Component {
 
         this.state = {
           statCategories:[],
-          subEnts:[],
+          // subEnts:props.subEnts,
           locations:[],
           pcItems:[],
           cateId:null,
@@ -85,9 +85,6 @@ export default class FiltersSection extends React.Component {
           return filterList[item]
         })
 
-        // console.log('this.props.showSearchbar', this.props.showSearchbar)
-        // console.log('this.filterList', this.filterList)
-
     }
 
     componentWillMount(){
@@ -96,7 +93,7 @@ export default class FiltersSection extends React.Component {
 
         this.setState({
           statCategories:getFilterCategories(data.statCategories),
-          subEnts:getFilterEnts(data.subEnts),
+          // subEnts:getFilterEnts(data.subEnts),
           locations:getFilterLocations(data.locations),
           pcItems:getFilterPcItems(data.pcItems)
         })
@@ -154,9 +151,9 @@ export default class FiltersSection extends React.Component {
       });
     }
 
-    onEntPickerChange = (entValue) => {
+    onEntPickerChange = (entValue, subEnts) => {
       // console.log('entValue', entValue);
-      this.state.subEnts.map((item)=>{
+      subEnts.map((item)=>{
         if(item.value == entValue[0]){
           this.setState({
             entName:item.label,
@@ -220,7 +217,11 @@ export default class FiltersSection extends React.Component {
     }
     
     render(){
-      if(this.state.statCategories.length == 0 || this.state.subEnts.length == 0 || this.state.locations.length == 0){
+
+        const subEnts = this.props.subEnts ? this.props.subEnts : []
+  
+
+      if(this.state.statCategories.length == 0 || this.state.locations.length == 0){
         // console.log('render:1',this.state.statCategories.length>0 ? true : false)
         return <Text>no data</Text>
       }
@@ -273,11 +274,11 @@ export default class FiltersSection extends React.Component {
               {this.state.entName && this.state.entName != '公司' &&  this.showFilterList.indexOf(3) > -1 &&
                 <Text style={styles.filterTag} onPress={() => console.log('1st')}>{this.state.entName}</Text>
               }
-
+              {this.showFilterList.indexOf(4) > -1 &&
                 <Text style={styles.filterTag} onPress={() => console.log('1st')}>
                   {dateFormat(this.state.dateFrom)} - {dateFormat(this.state.dateTo)}
                 </Text>
-              
+              }
               {this.state.locstionName && this.state.locstionName != '全国' &&  this.showFilterList.indexOf(5) > -1 &&
                 <Text style={styles.filterTag} onPress={() => console.log('1st')}>{this.state.locstionName}</Text>
               }
@@ -337,9 +338,9 @@ export default class FiltersSection extends React.Component {
 
                 {this.showFilterList[this.state.selectedIndex] == 3 &&
                   <PickerView
-                    onChange={this.onEntPickerChange}
+                    onChange={(value)=>this.onEntPickerChange(value, subEnts)}
                     value={this.state.entValue}
-                    data={this.state.subEnts}
+                    data={subEnts}
                     cols={1}
                   />
                 }

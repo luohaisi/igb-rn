@@ -11,6 +11,10 @@ import Ionicons from '../../Components/Ionicons';
 // Services
 import {getRemoteData}  from '../../Services/CommonService.js'
 
+import {
+  getFilterEnts
+} from '../../Utils/functions'
+
 var ls = require('react-native-local-storage');
 
 const Item = List.Item;
@@ -48,7 +52,8 @@ export default class ProjectsScreen extends React.Component {
       piStatus:'进行中',
       piType:2,
       searchKey:'',
-      renderView:false
+      renderView:false,
+      subEnts:null
     }
     this.willFocusSubscription
   }
@@ -80,6 +85,9 @@ export default class ProjectsScreen extends React.Component {
     ls.get('userInfo').then((data) => {
       if(data && data.token){
         this.token = data.token
+        this.setState({
+          subEnts: getFilterEnts(data.subEnts)
+        })
         // 获取远程数据
         this.getRemoteData()
   
@@ -229,7 +237,7 @@ export default class ProjectsScreen extends React.Component {
       return (
       <WingBlank size="sm" style={{marginBottom:130}}>
         
-        <FiltersSection onUpdateFilter={this._onUpdateFilter} />
+        {this.state.subEnts && <FiltersSection onUpdateFilter={this._onUpdateFilter} subEnts={this.state.subEnts} />}
         
         <FlatList
           data={this.state.list}
