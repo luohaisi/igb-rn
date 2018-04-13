@@ -3,13 +3,13 @@
  * @author luohaisi
  */
 import React from 'react'
-import { View, Text, StyleSheet } from 'react-native';
+import { ScrollView, View, Text, StyleSheet } from 'react-native';
 import {Flex, WhiteSpace, WingBlank, List} from 'antd-mobile'
 
 // Services
 var {getRemoteData} = require('../../Services/CommonService.js')
 
-import MyTable from '../../Components/MyTable'
+import Table from '../../Components/Table'
 
  export default class OverviewModal extends React.Component {
 
@@ -65,7 +65,7 @@ import MyTable from '../../Components/MyTable'
             key: 'marketQuotePiCount',
           }];
         return (
-            <View style={{backgroundColor:'#fff'}}>
+          <ScrollView style={{backgroundColor:'#fff'}}>
             {/* <WingBlank size="sm"> */}
 
             <Text style={{textAlign: 'center'}}>总览详情</Text>
@@ -73,15 +73,15 @@ import MyTable from '../../Components/MyTable'
 
             <View style={styles.pannel}>
                 <Text style={styles.pannelHeader}>项目类型</Text>
-                <Flex>
+                <Flex justify="center" align="center">
                     <Flex.Item style={styles.flexItemStyle}>
-                        <Text>比价：<Text color="#00a0e9">{this.state.remoteData.comparePiCount}</Text></Text>
+                        <Text>比价：<Text style={{color:'#00a0e9'}}>{this.state.remoteData.comparePiCount}</Text></Text>
                     </Flex.Item>
                     <Flex.Item style={styles.flexItemStyle}>
-                        <Text>招标：<Text color="#00a0e9">{this.state.remoteData.tenderPiCount}</Text></Text>
+                        <Text>招标：<Text style={{color:'#00a0e9'}}>{this.state.remoteData.tenderPiCount}</Text></Text>
                     </Flex.Item>
                     <Flex.Item style={styles.flexItemStyle}>
-                        <Text>协议：<Text color="#00a0e9">{this.state.remoteData.agreementPiCount}</Text></Text>
+                        <Text>协议：<Text style={{color:'#00a0e9'}}>{this.state.remoteData.agreementPiCount}</Text></Text>
                     </Flex.Item>
                 </Flex>
             </View>
@@ -90,10 +90,10 @@ import MyTable from '../../Components/MyTable'
                 <Text style={styles.pannelHeader}>项目类型</Text>
                 <Flex>
                     <Flex.Item style={styles.flexItemStyle}>
-                        <Text>全邀请报价：<Text color="#00a0e9">{this.state.remoteData.allInvitedPiCount}</Text></Text>
+                        <Text>全邀请报价：<Text style={{color:'#00a0e9'}}>{this.state.remoteData.allInvitedPiCount}</Text></Text>
                     </Flex.Item>
                     <Flex.Item style={styles.flexItemStyle}>
-                        <Text>公开市场参与：<Text color="#00a0e9">{this.state.remoteData.marketQuotePiCount}</Text></Text>
+                        <Text>公开市场参与：<Text style={{color:'#00a0e9'}}>{this.state.remoteData.marketQuotePiCount}</Text></Text>
                     </Flex.Item>
                 </Flex>
             </View>
@@ -103,7 +103,13 @@ import MyTable from '../../Components/MyTable'
             <WhiteSpace />
             {this.state.remoteData.piStatGroupByEnt 
             ?
-                <MyTable 
+              <View>
+                <Flex >
+                    <Flex.Item style={{alignItems:'center', height:30,marginTop:20}}>
+                    <Text style={{fontSize:15,textAlign:'center'}}>子集团各企业邀请与公开采购项目汇总表</Text>
+                    </Flex.Item>
+                </Flex>
+                <Table 
                     header="子集团各企业邀请与公开采购项目汇总表"
                     height={360}
                     dataSource={this.state.remoteData.piStatGroupByEnt}
@@ -111,12 +117,13 @@ import MyTable from '../../Components/MyTable'
                     tableBorderFree
                     isBlueHead
                     />
+              </View>
             :
                 null
             }
                 
             {/* </WingBlank> */}
-            </View>
+          </ScrollView>
         )
     }
 
@@ -125,7 +132,8 @@ import MyTable from '../../Components/MyTable'
  const styles = StyleSheet.create({
     flexItemStyle: {
         alignItems:'center',
-        height:30
+        height:30,
+        paddingTop:5
         // color:'#333'
     },
     pannel:{
@@ -137,6 +145,8 @@ import MyTable from '../../Components/MyTable'
         backgroundColor:'#f2f5fe',
         margin:0,height:30,
         lineHeight:30,
+        // alignSelf:'center',
+        textAlign:'center',
         alignItems:'center'
     }
  })
