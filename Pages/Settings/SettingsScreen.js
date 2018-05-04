@@ -27,10 +27,28 @@ export default class SettingsScreen extends React.Component {
       // alignSelf:'center'
     },
     headerStyle:{
-      backgroundColor:'rgb(19,125,188)'
+      backgroundColor:'#117BE9'
     },
     headerTintColor:'#F2F2F2'  // 返回箭头的颜色
   };
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      username:''
+    }
+  }
+
+
+  componentWillMount() {
+
+    ls.get('userInfo').then((data) => {
+
+      this.setState({
+        username:data.loginName
+      })
+    })
+  }
 
   logout = () =>{
 
@@ -68,6 +86,9 @@ export default class SettingsScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
+
+        <Text style={styles.username}>欢迎您： {this.state.username}</Text>
+
         <FlatList
             style={{flex: 1}}
           data={[
@@ -108,7 +129,13 @@ export default class SettingsScreen extends React.Component {
     container: {
      flex: 1,
      paddingTop: 10,
-     backgroundColor:'rgb(19,125,188)',
+     backgroundColor:'#117BE9',
+    },
+    username:{
+      textAlign:'center',
+      color:'#f2f2f2',
+      fontSize:20,
+      margin:50
     },
     settingItem:{
       flex: 1, 
@@ -120,7 +147,7 @@ export default class SettingsScreen extends React.Component {
     },
     logoutButton:{
       height: 50, 
-      backgroundColor: 'rgb(19,125,188)',
+      backgroundColor: '#117BE9',
       borderColor:'#F2F2F2',
       marginBottom:20,
       width:'50%'
