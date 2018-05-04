@@ -3,13 +3,14 @@
  * @author luohaisi
  */
 import React from 'react';
-import { View, Text, ScrollView, StyleSheet, WebView, Image } from 'react-native';
-import { WingBlank, WhiteSpace, Grid, ActivityIndicator, Flex, List, FlatList, Toast, Button } from 'antd-mobile'
+import { View, Text, ScrollView, StyleSheet, WebView, Image, FlatList } from 'react-native';
+import { WingBlank, WhiteSpace, Grid, ActivityIndicator, Flex, List, Toast, Button } from 'antd-mobile'
 import Ionicons from '../../Components/Ionicons';
 import FiltersSection from '../Project/FiltersSection'
 // Services
 import {getRemoteData}  from '../../Services/CommonService.js'
-var ls = require('react-native-local-storage');
+import { get } from "react-native-local-storage";
+import { URL_FOR_ADVANCED_MATERIAL } from "../../Conf/Host.js";
 
 import {
   DiscoveryLineChart
@@ -101,7 +102,8 @@ export default class DiscoveryScreen extends React.Component {
 
     this.state = {
       remoteData:[],
-      renderView:false
+      renderView:false,
+      newList:[]
     }
     this.pc_type = 'PC预制外墙板'
     this.spec = "清水"
@@ -125,8 +127,7 @@ export default class DiscoveryScreen extends React.Component {
 
   _init(){
 
-    // 从接口请求默认数据
-    ls.get('userInfo').then((data) => {
+    get('userInfo').then((data) => {
       if(data && data.token){
         this.token = data.token
         this.entId = data.entId
@@ -136,6 +137,9 @@ export default class DiscoveryScreen extends React.Component {
       }else{
         Toast.fail('获取用户信息失败。', 2)
       }
+
+      // 获取新材料列表
+      this._getAdvancedMaterialList()
       
     });
   }
@@ -172,6 +176,31 @@ export default class DiscoveryScreen extends React.Component {
     })
   }
 
+  _getAdvancedMaterialList = () => {
+
+    fetch(URL_FOR_ADVANCED_MATERIAL + '/list', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        // body: JSON.stringify(params)
+    })
+    .then((response) => response.json())
+    .then((responseJson) => {
+      // console.log('responseJson', responseJson)
+      this.setState({
+        newList:responseJson.list
+      })
+      
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+
+    
+  }
+
   _dateFormatTrans = (date) => {
     const year = date.split('-')[0]
     const month = date.split('-')[1].length == 2 ? date.split('-')[1] : '0' + date.split('-')[1]
@@ -188,6 +217,45 @@ export default class DiscoveryScreen extends React.Component {
     this.getRemoteData()
 
     // console.log('_onUpdateFilter', params)
+  }
+
+  _renderItem = ({item, index}) => {
+
+
+    return (
+      <List.Item 
+        style={{height:150, marginBottom:10, borderRadius:5}}
+        thumb={<Image style={{width: 100, height: 100, borderRadius:5}} source={{uri: item.cover?item.cover:'http://www.igreenbuy.com/themes/simple/public/images/usericon.jpg'}} />}
+        onClick={()=>this.props.navigation.navigate('DiscoveryDetai',{articleId:item.id})}
+      >
+        <View style={{height:60, padding:10, paddingTop:20}}>
+          <Flex>
+            <Flex.Item >
+              <Text numberOfLines={1} style={{color:'#65a8e1', fontSize:18}}>{item.title}</Text>
+            </Flex.Item>
+          </Flex>
+          
+        </View>
+
+        <View style={{height:90, padding:10, paddingBottom:50}}>
+    
+          <Flex direction="column" align="start" justify="start">
+          
+              <Text numberOfLines={1} style={{color:'#a1a1a1', height:40}}>
+                <Ionicons name={getIconName(item.type_name)} size={15} /> {item.type_name}
+              </Text>
+          
+              <Text style={{height:40}}>
+                <Ionicons name={'location-icon'} size={15} /> {item.location} &nbsp;
+                <Ionicons name={'material-icon'} size={15} /> {item.materials}  &nbsp;
+                <Ionicons name={'time-icon'} size={15} /> {item.created_time}
+              </Text>
+          </Flex>
+          <WhiteSpace />
+          <WhiteSpace />
+        </View>
+      </List.Item>
+    )
   }
 
   render() {
@@ -248,14 +316,24 @@ export default class DiscoveryScreen extends React.Component {
           
 
           <WingBlank size="sm">
-            {newList.map((item, key) => {
+
+            <FlatList
+              data={this.state.newList}
+              renderItem={this._renderItem}
+              keyExtractor={(item, index) => index.toString()}
+              initialNumToRender={2}
+              refreshing={true}
+            />
+
+
+            {/* {this.state.newList.length > 0 && this.state.newList.map((item, key) => {
 
               return(
                 <List.Item 
                   style={{height:150, marginBottom:10}}
-                  thumb={<Image style={{width: 100, height: 100}} source={{uri: item.cover}} />}
+                  thumb={<Image style={{width: 100, height: 100}} source={{uri: item.cover?item.cover:'http://www.igreenbuy.com/themes/simple/public/images/usericon.jpg'}} />}
                   // arrow="horizontal"
-                  onClick={()=>this.props.navigation.navigate('DiscoveryDetai',{articleId:key})}
+                  onClick={()=>this.props.navigation.navigate('DiscoveryDetai',{articleId:item.id})}
                   key={key}
                 >
                   <View style={{height:60, padding:10, paddingTop:20}}>
@@ -272,13 +350,13 @@ export default class DiscoveryScreen extends React.Component {
                     <Flex direction="column" align="start" justify="start">
                     
                         <Text numberOfLines={1} style={{color:'#a1a1a1', height:40}}>
-                          <Ionicons name={getIconName(item.typeName)} size={15} /> {item.typeName}
+                          <Ionicons name={getIconName(item.type_name)} size={15} /> {item.type_name}
                         </Text>
                    
                         <Text style={{height:40}}>
                           <Ionicons name={'location-icon'} size={15} /> {item.location} &nbsp;
                           <Ionicons name={'material-icon'} size={15} /> {item.materials}  &nbsp;
-                          <Ionicons name={'time-icon'} size={15} /> {item.createTime}
+                          <Ionicons name={'time-icon'} size={15} /> {item.created_time}
                         </Text>
                     </Flex>
                     <WhiteSpace />
@@ -286,7 +364,7 @@ export default class DiscoveryScreen extends React.Component {
                   </View>
                 </List.Item>
               )
-            })}
+            })} */}
           </WingBlank>
 
         </ScrollView>

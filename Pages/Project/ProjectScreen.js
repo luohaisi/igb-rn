@@ -246,7 +246,6 @@ export default class ProjectsScreen extends React.Component {
           refreshing={true}
           // onEndReached={this._onEndReached}
           // extraData={}
-          refreshing={true}
           // ListEmptyComponent={<Text>此处空空如也</Text>}
           ListHeaderComponent={this._renderHeader}
           ListFooterComponent={this._renderFooter}
